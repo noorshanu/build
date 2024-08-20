@@ -1,12 +1,13 @@
-import { useEffect } from "react";
+// @ts-nocheck
+
+import { useEffect, useState, useRef } from "react";
 import Button from "./Button";
 import ConnectWalletButton from "./ConnectWalletButton";
 import CopyToClipboardButton from "./CopyToClipboardButton";
 import Typography from "./Typography";
 import { BsKey } from "react-icons/bs";
 import { useAccount, useBalance, useContractReads } from "wagmi";
-import { useState } from "react";
-import { useRef } from "react";
+
 import contractAbi from "config/contract-abi.json";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
@@ -67,7 +68,9 @@ const MyWallet = () => {
         });
     }
 
-    return () => (effectRan.current = true);
+    return () => {
+      effectRan.current = true;
+    };
   }, []);
 
   return (

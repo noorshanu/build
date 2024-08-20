@@ -32,7 +32,7 @@ interface TextareaProps
     VariantProps<typeof InputVariants> {
   label?: string;
   characterCount?: any;
-  error: any;
+  error?: any;
 }
 
 const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(

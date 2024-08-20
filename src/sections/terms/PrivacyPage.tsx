@@ -1,6 +1,6 @@
-
 import PageLayout from "layouts/PageLayout";
 import { Helmet } from "react-helmet";
+
 function PrivacyPage() {
   return (
     <div>
@@ -128,9 +128,7 @@ function PrivacyPage() {
               vetting process). Once published, it may be accessible to third
               parties not covered under this privacy policy.{" "}
             </p>
-            <h1>
-              Legitimate Reasons for Processing Your Personal Information
-            </h1>
+            <h1>Legitimate Reasons for Processing Your Personal Information</h1>
             <p>
               We only collect and use your personal information when we have a
               legitimate reason for doing so. In which instance, we only collect
@@ -475,7 +473,9 @@ function PrivacyPage() {
               Additional Disclosures for General Data Protection Regulation
               (GDPR) Compliance (EU)
             </h1>
-            <h1 className=" text-2xl font-bold">Data Controller / Data Processor</h1>
+            <h1 className=" text-2xl font-bold">
+              Data Controller / Data Processor
+            </h1>
             <p>
               The GDPR distinguishes between organisations that process personal
               information for their own purposes (known as &ldquo;data
@@ -664,7 +664,9 @@ function PrivacyPage() {
               offer. Participation in a financial incentive program requires
               your prior opt-in consent, which you may revoke at any time.{" "}
             </p>
-            <h1 className=" text-2xl font-bold">California Notice of Collection</h1>
+            <h1 className=" text-2xl font-bold">
+              California Notice of Collection
+            </h1>
             <p>
               In the past 12 months, we have collected the following categories
               of personal information enumerated in the California Consumer

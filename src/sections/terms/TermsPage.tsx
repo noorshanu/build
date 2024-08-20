@@ -1,4 +1,3 @@
-
 import PageLayout from "layouts/PageLayout";
 import { Helmet } from "react-helmet";
 
@@ -19,15 +18,16 @@ function TermsPage() {
             <h2 className=" text-3xl font-bold">Terms of Service</h2>
             <p>
               These Terms of Service govern your use of the website located at{" "}
-              <a href=" https://deelance.com/">
-                https://deelance.com/
-              </a>{" "}
-              and any related services provided by https://deelance.com/ LLC.{" "}
+              <a href=" https://deelance.com/">https://deelance.com/</a> and any
+              related services provided by https://deelance.com/ LLC.{" "}
             </p>
             <p>
               By accessing{" "}
-              <a href="https://deelance.com/" className=" text-blue-600 cursor-pointer">
-                 https://deelance.com/
+              <a
+                href="https://deelance.com/"
+                className=" text-blue-600 cursor-pointer"
+              >
+                https://deelance.com/
               </a>
               , you agree to abide by these Terms of Service and to comply with
               all applicable laws and regulations. If you do not agree with

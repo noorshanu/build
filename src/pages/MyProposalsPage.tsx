@@ -15,7 +15,10 @@ const Card = () => {
         <Typography>Posted Dec 19, 2021</Typography>
       </div>
       <div>
-        <Button> <a href="/job-detail">View Proposal</a></Button>
+        <Button>
+          {" "}
+          <a href="/job-detail">View Proposal</a>
+        </Button>
       </div>
     </div>
   );

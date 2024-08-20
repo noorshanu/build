@@ -6,8 +6,8 @@ import { BASE_URL } from "utils/constants";
 import Button from "./Button";
 
 export default function CountrySelect() {
-  const [user, setUser] = useState(null);
-  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [user, setUser] = useState<any>(null);
+  const [selectedCountry, setSelectedCountry] = useState<any>(null);
 
   useEffect(() => {
     // Ottenere le informazioni dell'utente autenticato
@@ -36,12 +36,12 @@ export default function CountrySelect() {
     }
   }, []);
 
-  const fetchData = (inputValue) => {
+  const fetchData = (inputValue: any) => {
     return new Promise((resolve) => {
       axios
         .get(`https://restcountries.com/v3.1/name/${inputValue}?fields=name`)
         .then((res) => {
-          const updatedData = res.data.map((item) => {
+          const updatedData = res.data.map((item: any) => {
             return { label: item.name.common, value: item.name.common };
           });
           resolve(updatedData);
@@ -55,7 +55,7 @@ export default function CountrySelect() {
 
   const loadingOptions = debounce(fetchData, 2000);
 
-  const changeHandler = (selectedOption) => {
+  const changeHandler = (selectedOption: any) => {
     setSelectedCountry(selectedOption);
   };
 
@@ -87,7 +87,7 @@ export default function CountrySelect() {
       <AsyncSelect
         cacheOptions
         defaultOptions
-        loadOptions={loadingOptions}
+        loadOptions={loadingOptions as any}
         onChange={changeHandler}
         value={selectedCountry}
       />

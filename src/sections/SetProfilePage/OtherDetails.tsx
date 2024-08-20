@@ -7,8 +7,10 @@ import { useFormContext } from "react-hook-form";
 function OtherDetails() {
   const {
     register,
-    formState: { errors },
+    formState: { errors: formErrors },
   } = useFormContext();
+
+  const errors: any = formErrors;
 
   return (
     <div>

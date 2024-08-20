@@ -1,8 +1,7 @@
-import Logo from "components/Logo";
 import Typography from "components/Typography";
 import { useTranslation } from "react-i18next";
 
-const Card = ({ icon, title, desc }) => {
+const Card = ({ icon, title, desc }: any) => {
   return (
     <div className="flex-1">
       <div className="w-14 h-14 rounded-full bg-white border-[10px] border-green-haze-800 mx-auto flex items-center justify-center mb-4">
@@ -29,7 +28,7 @@ const Card = ({ icon, title, desc }) => {
 
 const VerticalDivider = () => {
   return (
-    <div className="max-sm:block max-lg:hidden h-[2px] sm:min-h-full w-full sm:w-[2px] bg-woodsmoke-400"></div>
+    <div className="max-sm:block max-lg:hidden h-[2px] sm:min-h-full w-full sm:w-[2px] bg-woodsmoke-400" />
   );
 };
 

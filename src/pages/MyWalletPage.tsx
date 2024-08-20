@@ -1,18 +1,8 @@
-import TabBar from "components/TabBar";
-import TabButton from "components/TabButton";
 import Typography from "components/Typography";
 import UserDetailsBar from "components/UserDetailsBar";
 import PageLayout from "layouts/PageLayout";
-import { useState } from "react";
-import Overview from "sections/MyWalletPage/Overview";
-import TotalNfts from "sections/MyWalletPage/TotalNfts";
-import TxHistory from "sections/MyWalletPage/TxHistory";
-
-const tabs = ["Overview", "Total NFTs", "Transaction History"];
 
 function MyWalletPage() {
-  const [tab, setTab] = useState(tabs[0]);
-
   return (
     <PageLayout>
       <div className="container-wrapper">

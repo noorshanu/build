@@ -4,7 +4,7 @@ import Typography from "./Typography";
 function ArticleCard() {
   return (
     <div className="w-full rounded-xl p-6 bg-woodsmoke-300 dark:bg-woodsmoke-700">
-      <div className="aspect-video rounded-xl bg-black mb-4"></div>
+      <div className="aspect-video rounded-xl bg-black mb-4" />
 
       <Typography
         variant="xl"

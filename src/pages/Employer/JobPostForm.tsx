@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PostJobs from "./PostJobs";
 import PostJobsNext from "./PostJobsNext";
 import { useNavigate } from "react-router-dom";
@@ -17,19 +17,19 @@ function JobPostForm() {
   }, [token, navigate]);
 
   // Definizione della funzione onNext
-  const onNext = (details) => {
+  const onNext = (details: any) => {
     setJobDetails(details);
     setCurrentStep(2); // Passa al passo successivo
   };
 
   // Definizione della funzione per gestire la pubblicazione del lavoro
-  const onPost = async (fullDetails) => {
+  const onPost = async (fullDetails: any) => {
     try {
       const response = await fetch(`${BASE_URL}/post-job`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(fullDetails),
       });

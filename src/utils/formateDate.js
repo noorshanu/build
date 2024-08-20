@@ -8,15 +8,16 @@ function formateDate(creationDate) {
 
   if (minutesAgo < 1) {
     return "Posted just now";
-  } else if (minutesAgo === 1) {
-    return "Posted 1 minute ago";
-  } else if (minutesAgo < 60) {
-    return `Posted ${minutesAgo} minutes ago`;
-  } else {
-    // You can add similar logic for hours, days, etc. if needed
-    // For simplicity, let's just return the default date format
-    return `Posted on ${postDate.toLocaleDateString()}`;
   }
+  if (minutesAgo === 1) {
+    return "Posted 1 minute ago";
+  }
+  if (minutesAgo < 60) {
+    return `Posted ${minutesAgo} minutes ago`;
+  }
+  // You can add similar logic for hours, days, etc. if needed
+  // For simplicity, let's just return the default date format
+  return `Posted on ${postDate.toLocaleDateString()}`;
 }
 
 export default formateDate;

@@ -2,44 +2,41 @@ import { FaChevronDown } from "react-icons/fa";
 import Button from "./Button";
 import Checkbox from "./Checkbox";
 import Typography from "./Typography";
-import { useTranslation } from "react-i18next";
 import CheckBoxNumberIndicator from "./CheckBoxNumberIndicator";
 
 function FilterBar() {
-  const { t } = useTranslation();
-
   return (
     <div className="bg-white dark:bg-woodsmoke-900 rounded-lg p-6 [&>*:not(:last-child)]:pb-6 [&>*:not(:last-child)]:border-b-1 [&>*:not(:last-child)]:border-black/20 dark:[&>*:not(:last-child)]:border-white/20 space-y-7 shadow-md">
       <div>
         <Typography variant="lg" className="font-medium mb-5">
-          {t("Filters")}
+          {"Filters"}
         </Typography>
         <Typography variant="lg" className="font-medium mb-5">
-          {t("Categories")}
+          {"Categories"}
         </Typography>
 
         <div className="space-y-3 flex flex-col">
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("Design & Creative")} />
+            <Checkbox label={"Design & Creative"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("Business")} />
+            <Checkbox label={"Business"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("Digital Marketing")} />
+            <Checkbox label={"Digital Marketing"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("Life Style")} />
+            <Checkbox label={"Life Style"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("Programming & Tech.")} />
+            <Checkbox label={"Programming & Tech."} />
           </CheckBoxNumberIndicator>
           <Button
             variant="simple"
             className="w-fit px-0 h-auto pt-2"
             endIcon={<FaChevronDown className="text-[.9em]" />}
           >
-            {t("Show More")}
+            {"Show More"}
           </Button>
         </div>
       </div>
@@ -47,113 +44,113 @@ function FilterBar() {
       <div>
         <div className="space-y-3 flex flex-col">
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("$0K - $20K")} />
+            <Checkbox label={"$0K - $20K"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("$20K - $40K")} />
+            <Checkbox label={"$20K - $40K"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("$40K - $60K")} />
+            <Checkbox label={"$40K - $60K"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("$60K - $80K")} />
+            <Checkbox label={"$60K - $80K"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("$80K - $100K")} />
+            <Checkbox label={"$80K - $100K"} />
           </CheckBoxNumberIndicator>
           <Button
             variant="simple"
             className="w-fit px-0 h-auto pt-2"
             endIcon={<FaChevronDown className="text-[.9em]" />}
           >
-            {t("Show More")}
+            {"Show More"}
           </Button>
         </div>
       </div>
 
       <div>
         <Typography variant="lg" className="font-medium mb-5">
-          {t("Experience Level")}
+          {"Experience Level"}
         </Typography>
 
         <div className="space-y-3 flex flex-col">
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("Internship")} />
+            <Checkbox label={"Internship"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("Entry Level")} />
+            <Checkbox label={"Entry Level"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("Associate")} />
+            <Checkbox label={"Associate"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("Mid Level")} />
+            <Checkbox label={"Mid Level"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("Director")} />
+            <Checkbox label={"Director"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("Executive")} />
+            <Checkbox label={"Executive"} />
           </CheckBoxNumberIndicator>
         </div>
       </div>
 
       <div>
         <Typography variant="lg" className="font-medium mb-5">
-          {t("Onsite/Remote")}
+          {"Onsite/Remote"}
         </Typography>
 
         <div className="space-y-3 flex flex-col">
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("On-site")} />
+            <Checkbox label={"On-site"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("Remote")} />
+            <Checkbox label={"Remote"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("Hybrid")} />
+            <Checkbox label={"Hybrid"} />
           </CheckBoxNumberIndicator>
         </div>
       </div>
 
       <div>
         <Typography variant="lg" className="font-medium mb-5">
-          {t("Job Posted")}
+          {"Job Posted"}
         </Typography>
 
         <div className="space-y-3 flex flex-col">
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("All")} />
+            <Checkbox label={"All"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("1 Day")} />
+            <Checkbox label={"1 Day"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("7 Days")} />
+            <Checkbox label={"7 Days"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("1 Month")} />
+            <Checkbox label={"1 Month"} />
           </CheckBoxNumberIndicator>
         </div>
       </div>
 
       <div>
         <Typography variant="lg" className="font-medium mb-5">
-          {t("Job type")}
+          {"Job type"}
         </Typography>
 
         <div className="space-y-3 flex flex-col">
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("Full Time")} />
+            <Checkbox label={"Full Time"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("Part Time")} />
+            <Checkbox label={"Part Time"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("Remote Jobs")} />
+            <Checkbox label={"Remote Jobs"} />
           </CheckBoxNumberIndicator>
           <CheckBoxNumberIndicator number={56}>
-            <Checkbox label={t("Freelancer")} />
+            <Checkbox label={"Freelancer"} />
           </CheckBoxNumberIndicator>
         </div>
       </div>

@@ -29,16 +29,14 @@ const TaskCard = () => {
             <Checkbox />
           </div>
 
-          <div className="w-12 aspect-square rounded-md bg-black"></div>
+          <div className="w-12 aspect-square rounded-md bg-black" />
 
           <Typography variant="base" className="font-medium">
             Lorem Ipsum is simply dummy text of the printing and typesetting
             industry
           </Typography>
         </div>
-          <Link to='/task-preview'>
-          
-          preview</Link>
+        <Link to="/task-preview">preview</Link>
         <button className="w-8 h-8 rounded bg-woodsmoke-900 flex items-center justify-center">
           <FaChevronDown />
         </button>
@@ -60,8 +58,8 @@ function TasksPage() {
             <Typography variant="2xl" className="font-medium">
               Task
             </Typography>
-            <Button as={Link} to="/create-task">
-              Create new Task
+            <Button asChild>
+              <Link to="/create-task">Create new Task</Link>
             </Button>
           </header>
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import Button from "components/Button";
 import Checkbox from "components/Checkbox";
 import Input from "components/Input";
@@ -11,14 +12,15 @@ import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import { twMerge } from "tailwind-merge";
 
-const EducationFields = ({ index, remove }) => {
+const EducationFields = ({ index, remove }: any) => {
   const {
     register,
     watch,
     control,
     setValue,
-    formState: { errors },
+    formState: { errors: formErrors },
   } = useFormContext();
+  const errors: any = formErrors;
   const currentlyStudying = watch(`education.${index}.currentlyStudyingHere`);
 
   useEffect(() => {
@@ -74,13 +76,12 @@ const EducationFields = ({ index, remove }) => {
         <Controller
           name={`education.${index}.currentlyStudyingHere`}
           control={control}
-          render={({ field, fieldState: { error } }) => (
+          render={({ field }) => (
             <Checkbox
               label="I am currently studying here"
               isChecked={field.value}
-              onChange={field.onChange}
-              error={error?.message}
               {...field}
+              onChange={field.onChange}
             />
           )}
         />
@@ -90,6 +91,7 @@ const EducationFields = ({ index, remove }) => {
       <Typography className="col-span-2">End Date*</Typography>
 
       <SelectBox
+        // @ts-ignore
         placeholder="Month"
         className="rounded-md dark:bg-woodsmoke-700"
         error={errors?.education?.[index]?.startMonth?.message}
@@ -118,6 +120,7 @@ const EducationFields = ({ index, remove }) => {
       </SelectBox>
 
       <SelectBox
+        // @ts-ignore
         placeholder="Month"
         className="rounded-md dark:bg-woodsmoke-700"
         error={errors?.education?.[index]?.endMonth?.message}

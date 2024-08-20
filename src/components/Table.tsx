@@ -1,7 +1,7 @@
 import { twMerge } from "tailwind-merge";
 import Typography from "./Typography";
 
-const tableVariants = {
+const tableVariants: any = {
   0: {
     wrapper:
       "w-full [&_tr>*:first-child]:pl-7 [&_tr>*:last-child]:pr-7 rounded-md overflow-hidden shadow-lg shadow-black/20",
@@ -17,14 +17,14 @@ const tableVariants = {
   },
 };
 
-function Table({ headings, tableItems, className, variant = 0 }) {
+function Table({ headings, tableItems, className, variant = 0 }: any) {
   return (
     <table className={twMerge(tableVariants[variant].wrapper, className)}>
       <thead className={tableVariants[variant].thead}>
         <tr className="h-14">
-          {headings.map((text, i) => (
-            <Typography key={i} as="td" variant="base" className="font-medium">
-              {text}
+          {headings.map((text: string, i: number) => (
+            <Typography key={i} asChild variant="base" className="font-medium">
+              <td>{text}</td>
             </Typography>
           ))}
         </tr>
@@ -33,9 +33,9 @@ function Table({ headings, tableItems, className, variant = 0 }) {
       <tbody className={tableVariants[variant].tbody}>
         {tableItems ? (
           <>
-            {tableItems.map((tr_items, tr_index) => (
+            {tableItems.map((tr_items: any, tr_index: number) => (
               <tr key={tr_index}>
-                {tr_items.map((td, i) => (
+                {tr_items.map((td: any, i: number) => (
                   <td key={i}>{td}</td>
                 ))}
               </tr>

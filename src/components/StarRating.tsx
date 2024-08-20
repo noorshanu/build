@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
-import { FaStar } from 'react-icons/fa';
+import { useState } from "react";
+import { FaStar } from "react-icons/fa";
 
-const StarRating = ({ totalStars = 5, initialRating = 0, onRate = (rating) => {} }) => {
+const StarRating = ({
+  totalStars = 5,
+  initialRating = 0,
+  onRate = () => {},
+}: any) => {
   const [rating, setRating] = useState(initialRating);
   const [hover, setHover] = useState(0);
 
   return (
     <div className="flex">
-      {[...Array(totalStars)].map((star, index) => {
+      {[...Array(totalStars)].map((_, index) => {
         const ratingValue = index + 1;
         return (
           <label key={index} className="cursor-pointer">
@@ -24,9 +28,7 @@ const StarRating = ({ totalStars = 5, initialRating = 0, onRate = (rating) => {}
             <FaStar
               className="mx-1"
               size={21}
-              color={
-                ratingValue <= (hover || rating) ? 'yellow' : 'gray'
-              }
+              color={ratingValue <= (hover || rating) ? "yellow" : "gray"}
               onMouseEnter={() => setHover(ratingValue)}
               onMouseLeave={() => setHover(0)}
             />

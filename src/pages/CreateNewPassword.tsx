@@ -2,10 +2,9 @@ import Button from "components/Button";
 import Input from "components/Input";
 import Typography from "components/Typography";
 import PageLayout from "layouts/PageLayout";
-import React from "react";
 import { useForm } from "react-hook-form";
 
-function LoginFormInput({ label, type, ...rest }) {
+function LoginFormInput({ label, type, ...rest }: any) {
   return (
     <div className="mb-4">
       <label htmlFor={rest.name} className="block mb-2">
@@ -18,7 +17,7 @@ function LoginFormInput({ label, type, ...rest }) {
 
 function CreateNewPassword() {
   const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data: any) => console.log(data);
   return (
     <>
       <PageLayout>
@@ -40,7 +39,6 @@ function CreateNewPassword() {
                         <LoginFormInput
                           type="password"
                           className="bg-[#383940]"
-                          name="New password"
                           placeholder="New password"
                           {...register("password", {
                             required: true,
@@ -51,7 +49,6 @@ function CreateNewPassword() {
                         <LoginFormInput
                           type="password"
                           className="bg-[#383940]"
-                          name="Confirm new password"
                           placeholder="Confirm new password"
                           {...register("password", {
                             required: true,

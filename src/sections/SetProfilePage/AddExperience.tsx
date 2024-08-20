@@ -11,14 +11,15 @@ import React, { useEffect } from "react";
 import { FieldMessage } from "pages/SetProfilePage";
 import { twMerge } from "tailwind-merge";
 
-const ExperienceFormFields = ({ field, index, remove }) => {
+const ExperienceFormFields = ({ field, index, remove }: any) => {
   const {
     control,
     watch,
     register,
-    formState: { errors },
+    formState: { errors: formErrors },
     setValue,
   } = useFormContext();
+  const errors: any = formErrors;
 
   const currentlyWorking = watch(`experience.${index}.currentlyWorkingHere`);
 
@@ -138,13 +139,12 @@ const ExperienceFormFields = ({ field, index, remove }) => {
         <Controller
           name={`experience.${index}.currentlyWorkingHere`}
           control={control}
-          render={({ field, fieldState: { error } }) => (
+          render={({ field: _field }) => (
             <Checkbox
               label="I am currently working in this role"
-              isChecked={field.value}
-              onChange={field.onChange}
-              error={error?.message}
-              {...field}
+              isChecked={_field.value}
+              {..._field}
+              onChange={_field.onChange}
             />
           )}
         />
@@ -154,6 +154,7 @@ const ExperienceFormFields = ({ field, index, remove }) => {
       <Typography className="col-span-2">End Date*</Typography>
 
       <SelectBox
+        // @ts-ignore
         placeholder="Month"
         className="rounded-md dark:bg-woodsmoke-700"
         error={errors?.experience?.[index]?.startDate?.message}
@@ -182,6 +183,7 @@ const ExperienceFormFields = ({ field, index, remove }) => {
       </SelectBox>
 
       <SelectBox
+        // @ts-ignore
         placeholder="Month"
         className="rounded-md dark:bg-woodsmoke-700"
         error={errors?.experience?.[index]?.endDate?.message}

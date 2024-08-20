@@ -1,17 +1,15 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import Avatar from "components/Avatar";
 import Typography from "components/Typography";
 import { BsFillBarChartFill } from "react-icons/bs";
-import { MdLocationPin, MdVerifiedUser } from "react-icons/md";
+import { MdLocationPin } from "react-icons/md";
 import { IoIosPaper } from "react-icons/io";
 import Button from "components/Button";
 import { FaRegBookmark } from "react-icons/fa";
 import IconText from "components/IconText";
 
-function JobCard({ job }) {
+function JobCard({ job }: any) {
   // Funzione per formattare il nome dell'utente
-  const formatUserName = (fullName) => {
+  const formatUserName = (fullName: any) => {
     // Verifica che fullName sia una stringa non vuota
     if (fullName) {
       const names = fullName.split(" ");

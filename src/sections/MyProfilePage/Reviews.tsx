@@ -6,7 +6,7 @@ import Pagination from "components/Pagination";
 import DullTabButton from "components/DullTabButton";
 import ReviewCard from "components/ReviewCard";
 
-const RatingBar = ({ title, progress }) => {
+const RatingBar = ({ title, progress }: any) => {
   return (
     <div className="flex items-center space-x-4">
       <Typography className="lh-1">{title}</Typography>
@@ -15,7 +15,7 @@ const RatingBar = ({ title, progress }) => {
         <div
           style={{ width: `${progress}%` }}
           className="h-full bg-green-haze-600"
-        ></div>
+        />
       </div>
 
       <Typography className="w-10 text-right lh-1">{progress}%</Typography>

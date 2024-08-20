@@ -1,4 +1,4 @@
-const FlexWrapContainer = ({ children, marginValue = 4 }) => {
+const FlexWrapContainer = ({ children, marginValue = 4 }: any) => {
   const marginClass = `[&>*]m-${marginValue}`;
   const negativeMarginClass = `-m-${marginValue}`;
 

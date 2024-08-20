@@ -2,7 +2,7 @@ import { MdHourglassTop } from "react-icons/md";
 import { FaTimes } from "react-icons/fa";
 import Button from "./Button";
 
-function Coomingsoon({ isOpen, onClose }) {
+function Coomingsoon({ isOpen, onClose }: any) {
   return (
     <>
       {isOpen && (

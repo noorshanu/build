@@ -3,7 +3,7 @@ import ReviewBox from "./ReviewBox";
 import { twMerge } from "tailwind-merge";
 
 // TabButton component
-const TabButton = ({ label, onClick, isActive }) => {
+const TabButton = ({ label, onClick, isActive }: any) => {
   return (
     <button
       className={twMerge(
@@ -18,13 +18,13 @@ const TabButton = ({ label, onClick, isActive }) => {
 };
 
 // Tabs component
-const Tabs = ({ children }) => {
+const Tabs = ({ children }: { children: any }) => {
   const [activeTab, setActiveTab] = useState(children[0].props.label);
 
   return (
     <div>
       <div className="tab-buttons flex items-center gap-4 mb-4">
-        {children.map((child) => {
+        {children.map((child: any) => {
           const { label } = child.props;
 
           return (
@@ -39,7 +39,7 @@ const Tabs = ({ children }) => {
       </div>
 
       <div className="tab-content">
-        {children.map((child) => {
+        {children.map((child: any) => {
           if (child.props.label !== activeTab) return undefined;
           return child.props.children;
         })}
@@ -55,14 +55,14 @@ function ReviewClients() {
         <h1 className="text-3xl mb-4 mt-1">{"Client's"} Reviews</h1>
         <div>
           <Tabs>
-            <div label="As a Freelancer">
+            <div>
               <ReviewBox />
               <ReviewBox />
               <ReviewBox />
               <ReviewBox />
               <ReviewBox />
             </div>
-            <div label="As a Job seeker">
+            <div>
               Content for Tab 2
               <ReviewBox />
             </div>

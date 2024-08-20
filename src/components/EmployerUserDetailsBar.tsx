@@ -132,7 +132,7 @@ const InviteFriends = () => {
   );
 };
 
-const EditableDetail = ({ title, subtitle }) => {
+const EditableDetail = ({ title, subtitle }: any) => {
   return (
     <div className="flex items-center justify-between">
       <div>

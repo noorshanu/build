@@ -1,6 +1,13 @@
+import { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 
-function SocialAuthIcon({ children, className }) {
+function SocialAuthIcon({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
   return (
     <a
       href="/"

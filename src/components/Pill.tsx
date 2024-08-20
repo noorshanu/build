@@ -1,7 +1,7 @@
 import { twMerge } from "tailwind-merge";
 import Typography from "./Typography";
 
-function Pill({ children, className, sizeVariant = "xs", as, ...props }) {
+function Pill({ children, className, sizeVariant = "xs", as, ...props }: any) {
   return (
     <Typography
       {...props}

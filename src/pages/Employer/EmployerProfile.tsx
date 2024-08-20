@@ -3,6 +3,7 @@ import YourStepToNewCareer from "components/YourStepToNewCareer";
 import HalfSplitGridLayout from "layouts/HalfSplitGridLayout";
 import EmployerProfileDetails from "components/EmployerCard/EmployerProfileDetails";
 import UserDetailsBar from "components/UserDetailsBar";
+
 function EmployerProfile() {
   return (
     <>

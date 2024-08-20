@@ -13,7 +13,7 @@ interface Props
     HTMLInputElement
   > {
   label?: string;
-  isChecked: any;
+  isChecked?: any;
 }
 
 const Checkbox = forwardRef<HTMLInputElement, Props>(

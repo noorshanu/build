@@ -1,6 +1,6 @@
 import Button from "./Button";
 
-export const DullTabButton = ({ active, onClick, children }) => {
+export const DullTabButton = ({ active, onClick, children }: any) => {
   return (
     <Button
       onClick={onClick}

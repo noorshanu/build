@@ -10,7 +10,7 @@ function EditableMetaverseId() {
   const [isEditing, setIsEditing] = useState(false);
   const inpRef = useRef(null);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: any) => {
     setClientData(e.target.value);
   };
 

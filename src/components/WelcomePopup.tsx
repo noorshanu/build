@@ -1,6 +1,6 @@
 import Button from "./Button";
 
-export default function WelcomePopup({ isOpen, onClose, children }) {
+export default function WelcomePopup({ isOpen, onClose, children }: any) {
   return (
     <>
       {isOpen && (

@@ -1,7 +1,7 @@
 import { twMerge } from "tailwind-merge";
 import Typography from "./Typography";
 
-export default function TextDivider({ text, className }) {
+export default function TextDivider({ text, className }: any) {
   return (
     <div
       className={twMerge(
@@ -9,9 +9,9 @@ export default function TextDivider({ text, className }) {
         className
       )}
     >
-      <div className="h-[1px] flex-1 bg-black dark:bg-white"></div>
+      <div className="h-[1px] flex-1 bg-black dark:bg-white" />
       {text ? <Typography className="mx-[1rem]">{text}</Typography> : null}
-      <div className="h-[1px] flex-1 bg-black dark:bg-white"></div>
+      <div className="h-[1px] flex-1 bg-black dark:bg-white" />
     </div>
   );
 }

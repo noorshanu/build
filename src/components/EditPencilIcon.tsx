@@ -9,11 +9,12 @@ interface Props
   > {}
 
 const EditPencilIcon = forwardRef<HTMLButtonElement, Props>(
-  ({ className, ...props }, ref) => {
+  ({ className, type = "button", ...props }, ref) => {
     return (
       <button
         ref={ref}
         {...props}
+        type={type}
         className={twMerge(
           "w-[2.2em] h-[2.2em] rounded-full bg-woodsmoke-200 dark:bg-woodsmoke-950 flex items-center justify-center text-sm absolute top-0 right-0",
           className

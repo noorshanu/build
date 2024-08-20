@@ -71,7 +71,7 @@ function MyPostJobs() {
               tableItems={new Array(2 * (tabs.indexOf(tab) + 1))
                 .fill("")
                 .map(() => tr)}
-            ></Table>
+            />
           </div>
         </div>
       </div>

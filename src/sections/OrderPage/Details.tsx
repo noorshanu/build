@@ -56,7 +56,7 @@ function Details() {
               <Typography key="4">$100</Typography>,
             ],
           ]}
-        ></Table>
+        />
       </div>
 
       <SupportContact className="col-span-2" />
@@ -81,7 +81,7 @@ function Details() {
         </Typography>
       </Paper>
 
-      <div className="col-span-3"></div>
+      <div className="col-span-3" />
 
       <Button variant="error-outlined">Cancel Order</Button>
       <Button className="col-span-2" variant="contained">

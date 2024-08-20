@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import IconText from "components/IconText";
 import Typography from "components/Typography";
 import PageLayout from "layouts/PageLayout";
@@ -55,7 +57,7 @@ const AboutBuyer = ({ jobData }) => {
       </Typography>
 
       <div className="grid grid-cols-[92px_1fr] items-center gap-5 mb-6">
-        <div className="aspect-square rounded-md bg-black"></div>
+        <div className="aspect-square rounded-md bg-black" />
         <div>
           <Typography className="font-medium mb-1">
             {jobData?.userId?.FullName}
@@ -154,7 +156,9 @@ const Attachments = () => {
 
 const PayOptionCard = ({ title, desc, active = false, onClick }) => {
   return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus
     <div
+      role="button"
       onClick={onClick}
       className={`bg-woodsmoke-200 dark:bg-woodsmoke-900 py-5 px-6 rounded-md flex space-x-3 cursor-pointer border-2  transition-all duration-200 hover:bg-woodsmoke-300 dark:hover:bg-woodsmoke-800 ${
         active ? "border-green-haze-600 shadow-lg" : "border-transparent"
@@ -172,7 +176,7 @@ const PayOptionCard = ({ title, desc, active = false, onClick }) => {
                 ? "bg-green-haze-600 border-white dark:border-woodsmoke-900"
                 : "bg-transparent border-transparent"
             }`}
-          ></div>
+          />
         </div>
       </div>
 
@@ -253,7 +257,7 @@ function JobDetailPage() {
             </div>
           </div>
 
-          <div></div>
+          <div />
         </header>
 
         <div className="grid lg:grid-cols-[1fr_372px] gap-10 lg:pr-10 mb-10">
@@ -403,7 +407,7 @@ function JobDetailPage() {
               <textarea
                 className="bg-woodsmoke-200 dark:bg-woodsmoke-900 p-5 rounded-md border-2 border-white/20 w-full resize-none h-32"
                 placeholder="Enter Description"
-              ></textarea>
+              />
             </div>
 
             <div className="mb-10">

@@ -7,7 +7,7 @@ const TYPE_PASSWORD = "password";
 const TYPE_TEXT = "text";
 
 const PasswordInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-  const { className, disabled, showErrorText = false, ..._props } = props;
+  const { className, disabled, showErrorText = false, ...otherProps } = props;
   const [type, setType] = useState(TYPE_PASSWORD);
 
   const togglePasswordVisibility = () => {
@@ -17,7 +17,7 @@ const PasswordInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   return (
     <div className="relative">
       <Input
-        {..._props}
+        {...otherProps}
         ref={ref}
         type={type}
         className={cn("pr-16", className)}

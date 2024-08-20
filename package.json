@@ -109,6 +109,7 @@
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.27.3",
+    "@types/debounce-promise": "^3.1.9",
     "@types/lodash": "^4.17.0",
     "@types/node": "^22.1.0",
     "@types/numeral": "^2.0.5",
@@ -116,6 +117,8 @@
     "@types/react-avatar-editor": "^13.0.2",
     "@types/react-copy-to-clipboard": "^5.0.7",
     "@types/react-dom": "^18.2.19",
+    "@types/react-helmet": "^6.1.11",
+    "@types/react-lines-ellipsis": "^0.15.6",
     "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^7.3.1",
     "@typescript-eslint/parser": "^7.3.1",

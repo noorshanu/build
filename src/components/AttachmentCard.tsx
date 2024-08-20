@@ -9,7 +9,7 @@ function AttachmentCard({
   size,
   className,
   downloadIcon,
-}) {
+}: any) {
   return (
     <div
       className={twMerge(

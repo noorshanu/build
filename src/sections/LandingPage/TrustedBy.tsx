@@ -54,7 +54,7 @@ function TrustedBy() {
       <Marquee
         className="flex items-center justify-between text-[60%] sm:text-[90%] xl:text-[100%]"
         speed={isAbove640px ? 50 : 30}
-        autoFill={true}
+        autoFill
       >
         {images.map((item, i) => {
           const imgStyle = {

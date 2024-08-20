@@ -10,7 +10,7 @@ function FormLabel({
   as?: any;
 }) {
   return (
-    <Typography as={as} className="mb-1 inline-block" {...props}>
+    <Typography className="mb-1 inline-block" {...props}>
       {children}
     </Typography>
   );

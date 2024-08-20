@@ -48,7 +48,7 @@ function AuthenticationPageWrapper({ children }: { children?: ReactNode }) {
           modules={[Autoplay, Pagination]}
           slidesPerView={1}
           allowTouchMove={false}
-          loop={true}
+          loop
           className="w-full h-full [&_.swiper-slide]:flex [&_.swiper-slide]:flex-col auth-slider"
           pagination={{
             enabled: true,
@@ -97,10 +97,10 @@ function AuthenticationPageWrapper({ children }: { children?: ReactNode }) {
           </SwiperSlide>
         </Swiper>
 
-        <div className="mt-8 lg:mt-12 auth-pagination-wrapper w-[90%] lg:w-[70%] mb-10 flex items-center space-x-4 [&>*]:flex-1 [&>*]:h-2 [&>*]:bg-green-haze-300 [&>*]:rounded-full [&>*]:block [&>*.swiper-pagination-bullet-active]:before:bg-green-haze-700 !static [&>*]:transition-all [&>*]:duration-200 [&>*]:relative [&>*]:overflow-hidden"></div>
+        <div className="mt-8 lg:mt-12 auth-pagination-wrapper w-[90%] lg:w-[70%] mb-10 flex items-center space-x-4 [&>*]:flex-1 [&>*]:h-2 [&>*]:bg-green-haze-300 [&>*]:rounded-full [&>*]:block [&>*.swiper-pagination-bullet-active]:before:bg-green-haze-700 !static [&>*]:transition-all [&>*]:duration-200 [&>*]:relative [&>*]:overflow-hidden" />
       </div>
 
-      <aside className="relative"></aside>
+      <aside className="relative" />
 
       <div className="px-8 lg:px-16 py-10 lg:py-12 relative z-30 flex-1">
         <Logo className="max-w-[14rem] w-full h-auto sm:h-auto xl:h-auto mb-12" />

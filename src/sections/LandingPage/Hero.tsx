@@ -7,10 +7,9 @@ import { Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css/effect-fade";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import MediaQueryWrapper from "components/MediaQueryWrapper";
 import { FREELANCER, JOB } from "utils/constants";
 
-const LocalPill = ({ children }) => {
+const LocalPill = ({ children }: any) => {
   return (
     <Pill
       as="button"
@@ -53,7 +52,7 @@ function Hero() {
   const [searchType, setSearchType] = useState(FREELANCER);
   const { t } = useTranslation();
 
-  const handleSearchTypeChange = (type) => {
+  const handleSearchTypeChange = (type: any) => {
     setSearchType(type);
   };
 

@@ -1,7 +1,6 @@
 import Input from "components/Input";
 import Paper from "components/Paper";
 import Textarea from "components/Textarea";
-import Typography from "components/Typography";
 import { FieldMessage } from "pages/SetProfilePage";
 import { useFormContext } from "react-hook-form";
 

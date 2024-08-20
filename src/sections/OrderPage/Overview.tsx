@@ -5,9 +5,8 @@ import SupportContact from "components/SupportContact";
 import Timer from "components/Timer";
 import TrackOrderTimelineCard from "components/TrackOrderTimelineCard";
 import Typography from "components/Typography";
-import { MdVerified } from "react-icons/md";
 
-const KeyValue = ({ title, value }) => {
+const KeyValue = ({ title, value }: any) => {
   return (
     <div className="flex items-center justify-between">
       <Typography className="text-black/60 dark:text-white/60">
@@ -104,11 +103,7 @@ function Overview() {
               Extend delivery date
             </Button>
 
-            <Typography
-              startIcon={
-                <MdVerified className="inline-block align-middle text-green-haze-400 text-[1.2em] mr-[.1em]" />
-              }
-            >
+            <Typography>
               <span className="inline-block align-middle">
                 Your Delivery is accepted
               </span>
@@ -159,7 +154,7 @@ function Overview() {
               title="Requirements submitted"
               active={false}
             />
-            <TrackOrderTimelineCard title="Order in progress" active={true} />
+            <TrackOrderTimelineCard title="Order in progress" active />
           </div>
         </Paper>
 

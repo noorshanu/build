@@ -6,7 +6,7 @@ import SliderNavigationButton from "components/SliderNavigationButton";
 import { FaLaptopCode } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 
-const Card = ({ title, positionsOpen, icon }) => {
+const Card = ({ title, positionsOpen, icon }: any) => {
   const { t } = useTranslation();
 
   return (

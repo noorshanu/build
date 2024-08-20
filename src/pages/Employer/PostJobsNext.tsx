@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Button from "components/Button";
 import Input from "components/Input";
 import Typography from "components/Typography";
 import PageLayout from "layouts/PageLayout";
 
-function PostJobsNext({ jobDetails, onPost }) {
+function PostJobsNext({ jobDetails, onPost }: any) {
   /*   const history = useHistory();
   const token = localStorage.getItem("token");
 
@@ -30,7 +30,7 @@ function PostJobsNext({ jobDetails, onPost }) {
   });
 
   // Aggiorna lo stato locale quando i campi di input cambiano
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setFullJobDetails({ ...fullJobDetails, [name]: value });
   };

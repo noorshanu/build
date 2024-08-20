@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 function useClipboard() {
   const [isCopied, setCopied] = useState(false);
 
-  const copyToClipboard = async (text) => {
+  const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
@@ -14,7 +14,7 @@ function useClipboard() {
   };
 
   useEffect(() => {
-    let timeoutId;
+    let timeoutId: any;
     if (isCopied) {
       timeoutId = setTimeout(() => {
         setCopied(false);

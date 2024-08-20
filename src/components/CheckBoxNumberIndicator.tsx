@@ -5,7 +5,7 @@ const CheckBoxNumberIndicator = ({
   number,
   className,
   indicatorClassName,
-}) => {
+}: any) => {
   return (
     <div className={cn("flex items-center justify-between", className)}>
       {children}

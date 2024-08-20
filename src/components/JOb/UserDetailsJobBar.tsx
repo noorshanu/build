@@ -1,4 +1,6 @@
-import { useState, useEffect, useContext } from "react";
+// @ts-nocheck
+
+import { useContext } from "react";
 
 import Typography from "components/Typography";
 import CopyToClipboardButton from "components/CopyToClipboardButton";
@@ -8,7 +10,6 @@ import EditableMetaverseId from "components/EditableMetaverseId";
 import Avatar from "components/Avatar";
 import MyWallet from "components/MyWallet";
 
-
 import { useTranslation } from "react-i18next";
 
 import { AuthContext } from "Providers/AuthContextProvider";
@@ -16,7 +17,7 @@ import { AuthContext } from "Providers/AuthContextProvider";
 const UserDetail = () => {
   const { t } = useTranslation();
   const { user } = useContext(AuthContext);
-  
+
   return (
     <div className="space-y-5">
       <div className="flex items-center space-x-3">
@@ -100,10 +101,7 @@ const InviteFriends = () => {
         <span className="z-10">{inviteLink}</span>
 
         <div className="absolute top-1/2 right-4 -translate-y-1/2 z-20 flex">
-          <CopyToClipboardButton
-            className="text-xl"
-            text={inviteLink}
-          />
+          <CopyToClipboardButton className="text-xl" text={inviteLink} />
         </div>
       </Typography>
     </div>

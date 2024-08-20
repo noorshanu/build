@@ -53,7 +53,7 @@ const categoriesData = [
 ];
 
 function FilterButtons() {
-  const [selectedValues, setSelectedValues] = useState([]);
+  const [selectedValues, setSelectedValues] = useState<any>([]);
   const { t } = useTranslation();
 
   return (
@@ -83,7 +83,7 @@ function FilterButtons() {
               <CommandGroup>
                 {categoriesData.map((item) => {
                   const isSelected = Boolean(
-                    selectedValues.find((val) => val === item.name)
+                    selectedValues.find((val: any) => val === item.name)
                   );
 
                   return (
@@ -93,12 +93,12 @@ function FilterButtons() {
                       onSelect={() => {
                         if (isSelected) {
                           setSelectedValues(
-                            selectedValues.filter((val) =>
+                            selectedValues.filter((val: any) =>
                               val === item.name ? null : val
                             )
                           );
                         } else {
-                          setSelectedValues((val) => [...val, item.name]);
+                          setSelectedValues((val: any) => [...val, item.name]);
                         }
                       }}
                     >
@@ -109,7 +109,7 @@ function FilterButtons() {
                       >
                         <div className="flex space-x-2 items-center">
                           <TickBox isChecked={isSelected} />
-                          <Typography as="span">{item.name}</Typography>
+                          <Typography>{item.name}</Typography>
                         </div>
 
                         {/* <Checkbox

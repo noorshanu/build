@@ -5,9 +5,7 @@ import WelcomeBanner from "components/WelcomeBanner";
 import HalfSplitGridLayout from "layouts/HalfSplitGridLayout";
 import PageLayout from "layouts/PageLayout";
 
-
 function HomePages() {
-
   return (
     <PageLayout>
       <div className="container-wrapper">
@@ -16,11 +14,10 @@ function HomePages() {
         </div>
 
         <HalfSplitGridLayout>
-          <UserDetailsBarJob/>
+          <UserDetailsBarJob />
           <JobList />
         </HalfSplitGridLayout>
       </div>
-   
     </PageLayout>
   );
 }

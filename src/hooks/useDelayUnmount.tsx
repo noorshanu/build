@@ -20,11 +20,11 @@
 
 import { useEffect, useState } from "react";
 
-function useDelayUnmount(isMounted, delayTime) {
+function useDelayUnmount(isMounted: boolean, delayTime: number) {
   const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
-    let timeoutId = null;
+    let timeoutId: any = null;
     if (isMounted && !shouldRender) {
       setShouldRender(true);
     } else if (!isMounted && shouldRender) {

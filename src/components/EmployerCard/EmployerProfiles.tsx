@@ -5,9 +5,7 @@ import Typography from "components/Typography";
 import EmployerUserDetailsBar from "components/EmployerUserDetailsBar";
 import HalfSplitGridLayout from "layouts/HalfSplitGridLayout";
 import PageLayout from "layouts/PageLayout";
-import WelcomePopup from "components/WelcomePopup";
-import { useState, useEffect } from "react";
-import { Link, Outlet, useParams, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import Button from "components/Button";
 
 const tabs = [
@@ -38,12 +36,8 @@ function EmployerProfiles() {
             </div>
 
             <div className=" flex justify-evenly gap-6">
-              <Button className="px-12" as="a" href="/inbox">
-                Chat
-              </Button>
-              <Button className=" px-12" as="a" href="/employer-profile">
-                Hire Me
-              </Button>
+              <Button className="px-12">Chat</Button>
+              <Button className=" px-12">Hire Me</Button>
             </div>
           </div>
 

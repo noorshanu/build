@@ -65,7 +65,7 @@ function SavedJobPage() {
               </Button>,
             ],
           ]}
-        ></Table>
+        />
       </div>
     </PageLayout>
   );

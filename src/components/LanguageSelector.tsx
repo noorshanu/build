@@ -1,5 +1,7 @@
-import { useEffect } from "react";
-import { useState } from "react";
+// @ts-nocheck
+
+import { useEffect, useState } from "react";
+
 import { useTranslation } from "react-i18next";
 
 function LanguageSelector() {
@@ -16,7 +18,7 @@ function LanguageSelector() {
   return (
     <div className="flex flex-col space-y-1 items-start">
       <select
-      className=" bg-green-haze-800 border-2 border-green-haze-700 rounded-lg  py-1 px-8 max-w-[150px] w-full text-white cursor-pointer"
+        className=" bg-green-haze-800 border-2 border-green-haze-700 rounded-lg  py-1 px-8 max-w-[150px] w-full text-white cursor-pointer"
         value={i18n.language}
         onChange={(e) => {
           const selectedLanguage = e.target.value;

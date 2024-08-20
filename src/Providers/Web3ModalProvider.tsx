@@ -1,4 +1,5 @@
 import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
+import { ReactNode } from "react";
 
 import { WagmiConfig } from "wagmi";
 import { mainnet } from "wagmi/chains";
@@ -20,6 +21,10 @@ const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
 // 3. Create modal
 createWeb3Modal({ wagmiConfig, projectId, chains });
 
-export default function Web3ModalProvider({ children }) {
+export default function Web3ModalProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
   return <WagmiConfig config={wagmiConfig}>{children}</WagmiConfig>;
 }

@@ -1,6 +1,5 @@
 import StarRating from "components/StarRating";
 import Typography from "components/Typography";
-import React from "react";
 
 function ReviewBox() {
   return (

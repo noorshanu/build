@@ -3,7 +3,7 @@ import Button from "./Button";
 import { twMerge } from "tailwind-merge";
 import { useTranslation } from "react-i18next";
 
-const PaginationButton = ({ active, children, className, ...props }) => {
+const PaginationButton = ({ active, children, className, ...props }: any) => {
   return (
     <Button
       {...props}
@@ -31,7 +31,7 @@ function StaticPagination() {
         <FaChevronLeft />
       </PaginationButton>
 
-      <PaginationButton active={true}>{t("1")}</PaginationButton>
+      <PaginationButton active>{t("1")}</PaginationButton>
       <PaginationButton>{t("2")}</PaginationButton>
       <PaginationButton>{t("3")}</PaginationButton>
       <PaginationButton>{t("...")}</PaginationButton>

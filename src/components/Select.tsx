@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { forwardRef } from "react";
 import SelectBox from "react-select";
 import useTheme from "states/useTheme";
@@ -15,11 +17,11 @@ const Select = forwardRef(
       lightColorScheme,
       menuPortalTarget = document.querySelector("#modals"),
       ...props
-    },
+    }: any,
     ref
   ) => {
     const globalTheme = useTheme((state) => state.theme);
-    const Comp = as ? as : SelectBox;
+    const Comp = as || SelectBox;
 
     const defaultColorScheme = {
       dark: {
@@ -33,6 +35,7 @@ const Select = forwardRef(
     };
 
     return (
+      // eslint-disable-next-line jsx-a11y/label-has-associated-control
       <label>
         {label ? <Typography className="mb-1">{label}</Typography> : null}
 
@@ -97,15 +100,15 @@ const Select = forwardRef(
                 globalTheme === "light"
                   ? "black"
                   : isMulti
-                  ? "#10d76d"
-                  : "white",
+                    ? "#10d76d"
+                    : "white",
               neutral70: "green",
               neutral60:
                 globalTheme === "light"
                   ? "black"
                   : isMulti
-                  ? "#10d76d"
-                  : "white",
+                    ? "#10d76d"
+                    : "white",
               neutral50:
                 globalTheme === "light"
                   ? "rgba(0,0,0,.3)"

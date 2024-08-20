@@ -1,6 +1,5 @@
 import Button from "components/Button";
 import Typography from "components/Typography";
-import PageLayout from "layouts/PageLayout";
 import { Link } from "react-router-dom";
 
 export default function NotFound() {
@@ -19,11 +18,11 @@ export default function NotFound() {
         </Typography>
 
         <div className="flex items-center space-x-5">
-          <Button as={Link} to="/">
-            Return Home
+          <Button asChild>
+            <Link to="/">Return Home</Link>
           </Button>
-          <Button as="a" href="mailto:info@deelance.com" variant="outlined">
-            Report Problem
+          <Button asChild variant="outlined">
+            <a href="mailto:info@deelance.com">Report Problem</a>
           </Button>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { FaMoon, FaSun } from "react-icons/fa";
 import useTheme from "states/useTheme";
 
-function ThemeSwitch({ className }) {
+function ThemeSwitch({ className }: any) {
   const { theme, switchToDarkMode, switchToLightMode } = useTheme(
     (state) => state
   );

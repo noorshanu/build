@@ -4,20 +4,13 @@ import Paper from "components/Paper";
 import Textarea from "components/Textarea";
 import Typography from "components/Typography";
 import PageLayout from "layouts/PageLayout";
-import { FaArrowLeft } from "react-icons/fa";
 
 function TicketRequestPage() {
   return (
     <PageLayout>
       <div className="container-wrapper">
         <header className="flex items-center justify-between mb-8">
-          <Typography
-            startIcon={
-              <FaArrowLeft className="inline-block text-[.9em] relative mt-[-.2em] mr-[.6em] cursor-pointer" />
-            }
-            variant="2xl"
-            className="font-semibold"
-          >
+          <Typography variant="2xl" className="font-semibold">
             My Ticket
           </Typography>
         </header>

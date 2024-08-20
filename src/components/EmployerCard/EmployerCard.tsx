@@ -2,11 +2,8 @@ import Button from "components/Button";
 import Typography from "components/Typography";
 import { BsHeartFill, BsStarFill } from "react-icons/bs";
 import { BiMap } from "react-icons/bi";
-import { useTranslation } from "react-i18next";
 
 function EmployerCard() {
-  const { t } = useTranslation();
-
   return (
     <div className="bg-white dark:bg-woodsmoke-900 shadow-lg rounded-lg py-4 px-8 relative">
       <BsHeartFill className="text-end absolute right-8 text-green-haze-600 text-2xl" />
@@ -16,10 +13,10 @@ function EmployerCard() {
           <img src="/images/avatar.png" alt="" className="w-[75px] h-auto" />
           <div className=" py-2">
             <Typography className=" text-xl font-semibold pb-1">
-              {t("James")}
+              {"James"}
             </Typography>
             <p className="flex items-center gap-1 text-black/60 dark:text-white/60 text-sm font-medium">
-              <BiMap /> {t("New York, US")}
+              <BiMap /> {"New York, US"}
             </p>
           </div>
         </div>
@@ -34,25 +31,25 @@ function EmployerCard() {
       </div>
 
       <div className=" mt-5">
-        <h1 className="font-[600] text-lg pb-3">{t("UI/UX Designer")}</h1>
+        <h1 className="font-[600] text-lg pb-3">{"UI/UX Designer"}</h1>
 
         <Typography className="pb-2 text-black/60 dark:text-white/60 font-normal text-xs">
-          {t("Job Duration :")}{" "}
+          {"Job Duration :"}{" "}
           <span className="text-black/60 dark:text-white/60 text-xs">
             Fulltime
           </span>
         </Typography>
         <Typography className="pb-2 text-black/60 dark:text-white/60 font-normal text-xs">
-          {t("Experience :")}{" "}
+          {"Experience :"}{" "}
           <span className="text-black/60 dark:text-white/60 text-xs">
             {" "}
-            {t("4 Year")}
+            {"4 Year"}
           </span>
         </Typography>
         <Typography className="text-sm text-black/60 dark:text-white/60">
-          {t(
+          {
             "Enhance your project with our Premium Custom Illustrations add-on! Elevate your UI/UX design with unique, tailor-made illustrations that bring your brand to life."
-          )}
+          }
         </Typography>
       </div>
 
@@ -61,25 +58,29 @@ function EmployerCard() {
           href="/"
           className="flex-1 bg-woodsmoke-100 dark:bg-woodsmoke-700 text-xs font-normal rounded-full py-2 px-6 shadow text-center whitespace-nowrap"
         >
-          {t("Adobe XD")}
+          {"Adobe XD"}
         </a>
         <a
           href="/"
           className="flex-1 bg-woodsmoke-100 dark:bg-woodsmoke-700 text-xs font-normal rounded-full py-2 px-6 shadow text-center whitespace-nowrap"
         >
-          {t("Adobe XD")}
+          {"Adobe XD"}
         </a>
         <a
           href="/"
           className="flex-1 bg-woodsmoke-100 dark:bg-woodsmoke-700  text-xs font-normal rounded-full py-2 px-6 shadow text-center whitespace-nowrap"
         >
-          {t("Adobe XD")}
+          {"Adobe XD"}
         </a>
       </div>
 
       <div className="flex justify-between pt-6">
-        <Button as="a" href='/employer-profile'>{t("Hire Me")}</Button>
-        <Button variant="outlined"><a href="/job-detail/657c385806198eb1005e5888">{t("View Details")}</a></Button>
+        <Button asChild>
+          <a href="/employer-profile">{"Hire Me"}</a>
+        </Button>
+        <Button variant="outlined">
+          <a href="/job-detail/657c385806198eb1005e5888">{"View Details"}</a>
+        </Button>
       </div>
     </div>
   );

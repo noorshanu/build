@@ -5,13 +5,14 @@ import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { FaArrowRightLong } from "react-icons/fa6";
 
-const Card = ({ title, desc }) => {
+const Card = ({ title, desc }: any) => {
   return (
     <div className="flex space-x-3">
       <aside className="flex-shrink-0">
         <img
           src="/images/tick-circle.svg"
           className="inline-block w-5 h-5 invert dark:invert-0 opacity-80"
+          alt="circle-tick"
         />
       </aside>
 
@@ -40,7 +41,7 @@ function About() {
         <img
           src="/images/african-girl.png"
           className="max-lg:hidden absolute bottom-0 right-[24%] h-[92%] w-[30%] object-contain object-bottom pointer-events-none select-none"
-          alt=""
+          alt="img"
         />
 
         <div className="max-lg:py-10 py-16 grid lg:grid-cols-2 max-lg:gap-8 gap-20">
@@ -60,7 +61,7 @@ function About() {
               <img
                 src="/images/water-drops.png"
                 className="absolute max-lg:bottom-full bottom-[94%] left-[-4%] w-20 max-lg:hidden"
-                alt=""
+                alt="water-drop"
               />
 
               <Typography variant="lg" className="max-lg:text-base opacity-80">
@@ -76,7 +77,7 @@ function About() {
           </main>
 
           <aside className="lg:grid grid-cols-2 lg:gap-6">
-            <div className="bg-white max-lg:hidden"></div>
+            <div className="bg-white max-lg:hidden" />
 
             <div className="bg-green-haze-500 dark:bg-green-haze-800 py-6 px-6 space-y-5">
               <Card

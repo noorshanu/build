@@ -51,7 +51,7 @@ function AddService() {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     append({
       code: data.skill,
       label: data.skill,
@@ -64,8 +64,8 @@ function AddService() {
     <div>
       <main className="grid grid-cols-2 gap-6">
         <Paper className="col-span-2">
-          <Typography htmlFor="skills" as="label" className="mb-2 flex">
-            Skills
+          <Typography asChild className="mb-2 flex">
+            <label htmlFor="skills">Skills</label>
           </Typography>
 
           <div className="flex space-x-4 [&>*]:flex-shrink-0">
@@ -93,7 +93,7 @@ function AddService() {
           </FieldMessage>
 
           <div className="flex [&>*]:mx-1.5 [&>*]:my-1.5 -mx-1.5 -my-1.5 flex-wrap mt-6">
-            {fields.map((field, index) => (
+            {fields.map((field: any, index) => (
               <Pill
                 as="div"
                 className="text-base flex space-x-2 whitespace-nowrap"

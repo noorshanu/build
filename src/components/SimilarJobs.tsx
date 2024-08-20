@@ -1,7 +1,9 @@
+// @ts-nocheck
+
 import JobCard from "./JOb/JobCard";
 import Typography from "./Typography";
 import { Swiper, SwiperSlide } from "swiper/react";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -43,7 +45,7 @@ function SimilarJobs() {
   }
 
   if (!jobs.length) {
-    return <div></div>;
+    return <div />;
   }
 
   return (
@@ -54,8 +56,8 @@ function SimilarJobs() {
 
       <Swiper slidesPerView={1.4} spaceBetween={30}>
         {jobs.map((job) => (
-           <SwiperSlide>
-          <JobCard key={job._id} job={job} />
+          <SwiperSlide key={job._id}>
+            <JobCard job={job} />
           </SwiperSlide>
         ))}
       </Swiper>

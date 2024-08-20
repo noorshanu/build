@@ -27,16 +27,16 @@ export const AutoComplete = ({
   onValueChange,
   disabled,
   isLoading = false,
-}) => {
-  const inputRef = useRef(null);
+}: any) => {
+  const inputRef = useRef<any>(null);
 
   const [isOpen, setOpen] = useState(false);
   const [selected, setSelected] = useState(value);
   const [inputValue, setInputValue] = useState(value?.label || "");
 
   const handleKeyDown = useCallback(
-    (event) => {
-      const input = inputRef.current;
+    (event: any) => {
+      const input: any = inputRef.current;
       if (!input) {
         return;
       }
@@ -49,7 +49,7 @@ export const AutoComplete = ({
       // This is not a default behaviour of the <input /> field
       if (event.key === "Enter" && input.value !== "") {
         const optionToSelect = options.find(
-          (option) => option.label === input.value
+          (option: any) => option.label === input.value
         );
         if (optionToSelect) {
           setSelected(optionToSelect);
@@ -70,7 +70,7 @@ export const AutoComplete = ({
   }, [selected]);
 
   const handleSelectOption = useCallback(
-    (selectedOption) => {
+    (selectedOption: any) => {
       setInputValue(selectedOption.label);
 
       setSelected(selectedOption);
@@ -113,7 +113,7 @@ export const AutoComplete = ({
               ) : null}
               {options.length > 0 && !isLoading ? (
                 <CommandGroup>
-                  {options.map((option) => {
+                  {options.map((option: any) => {
                     const isSelected = selected?.value === option.value;
                     return (
                       <CommandItem

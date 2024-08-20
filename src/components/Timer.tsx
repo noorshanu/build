@@ -1,7 +1,10 @@
+// @ts-nocheck
+
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 
-const TimerTitle = ({ title }) => {
+const TimerTitle = ({ title }: any) => {
   return (
     <div className="text-[.7em] sm:text-[0.875em] text-black/60 dark:text-white/60 uppercase">
       {title}
@@ -9,7 +12,7 @@ const TimerTitle = ({ title }) => {
   );
 };
 
-const TimerNumber = ({ time, color = "white" }) => {
+const TimerNumber = ({ time, color = "white" }: any) => {
   return (
     <div className="font-work-sans text-[1.875em] font-bold text-black/30 dark:text-white/30">
       {time}
@@ -21,7 +24,7 @@ const TimerSeperator = () => {
   return <TimerNumber time=":" />;
 };
 
-const TimeBox = ({ time, title }) => {
+const TimeBox = ({ time, title }: any) => {
   return (
     <div className="w-[3em] sm:w-[4.375em]">
       <TimerNumber time={time} />
@@ -30,13 +33,13 @@ const TimeBox = ({ time, title }) => {
   );
 };
 
-const Timer = ({ somestate }) => {
+const Timer = ({ somestate }: any) => {
   const [days, setDays] = useState("00");
   const [hours, setHours] = useState("00");
   const [minutes, setMinutes] = useState("00");
   const [seconds, setSeconds] = useState("00");
 
-  const isBritishSummerTime = (date) => {
+  const isBritishSummerTime = (date: any) => {
     const lastSundayMarch = new Date(date.getFullYear(), 2, 31, 1, 0, 0, 0);
     lastSundayMarch.setDate(
       lastSundayMarch.getDate() - lastSundayMarch.getDay()
@@ -61,16 +64,17 @@ const Timer = ({ somestate }) => {
 
       const distance = countdownDate - currentTime;
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor(
+      const _days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const _hours = Math.floor(
         (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
       );
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-      setDays(days);
-      setHours(hours);
-      setMinutes(minutes);
-      setSeconds(seconds);
+      const _minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const _seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      setDays(_days);
+      setHours(_hours);
+      setMinutes(_minutes);
+      setSeconds(_seconds);
 
       if (distance < 0) {
         clearInterval(interval);

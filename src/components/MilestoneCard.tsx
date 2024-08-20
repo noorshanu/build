@@ -16,7 +16,7 @@ function MilestoneCard() {
         <Typography>Due Date</Typography>
         <SelectBox
           className="rounded-md bg-woodsmoke-200/60 dark:bg-woodsmoke-700 h-[45px]"
-          options={[{ value: "Select" }]}
+          // options={[{ value: "Select" }] as any}
         />
       </div>
       <div className="space-y-2">

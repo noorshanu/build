@@ -32,7 +32,7 @@ const useTheme = create<{
     set(() => ({ theme: "light" }));
     setLightState();
   },
-  toggleTheme: () => {
+  toggleTheme: (): any => {
     set((state) => {
       if (state.theme === "light") {
         setLightState();

@@ -12,7 +12,7 @@ const Msg = ({
   showDateAndTime = true,
   children,
   isUser,
-}) => {
+}: any) => {
   return (
     <div
       className={twMerge("flex items-start sm:w-1/2", isUser ? "ml-auto" : "")}
@@ -27,7 +27,7 @@ const Msg = ({
           className={`w-11 rounded-full bg-black ${
             showAvatar ? "opacity-100 h-11" : "opacity-0 h-auto"
           }`}
-        ></div>
+        />
       </div>
 
       <aside className={twMerge("pt-1", isUser ? "ml-auto" : null)}>
@@ -53,14 +53,14 @@ const Msg = ({
 const DateDivider = () => {
   return (
     <div className="grid grid-cols-[1fr_auto_1fr] gap-4 items-center opacity-40 py-5">
-      <div className="h-[2px] bg-black/60 dark:bg-white/60"></div>
+      <div className="h-[2px] bg-black/60 dark:bg-white/60" />
       <Typography variant="sm">6 Aug 2022</Typography>
-      <div className="h-[2px] bg-black/60 dark:bg-white/60"></div>
+      <div className="h-[2px] bg-black/60 dark:bg-white/60" />
     </div>
   );
 };
 
-function Message({ className }) {
+function Message({ className }: { className?: string }) {
   return (
     <div
       className={twMerge(
@@ -72,10 +72,12 @@ function Message({ className }) {
         <Avatar
           title="Florencio Dorrance"
           subtitle={
-            <>
-              <span className="inline-block align-middle w-[.7em] h-[.7em] bg-green-haze-500 rounded-full mr-[.36em] relative top-[-.1em]"></span>
-              <span className="inline-block align-middle lh-1">Online</span>
-            </>
+            (
+              <>
+                <span className="inline-block align-middle w-[.7em] h-[.7em] bg-green-haze-500 rounded-full mr-[.36em] relative top-[-.1em]" />
+                <span className="inline-block align-middle lh-1">Online</span>
+              </>
+            ) as any
           }
         />
 
@@ -109,27 +111,27 @@ function Message({ className }) {
             repudiandae, libero voluptate dolorum.
           </Typography>
         </Msg>
-        <Msg isUser={true} showAvatar={false} showDateAndTime={false}>
+        <Msg isUser showAvatar={false} showDateAndTime={false}>
           <Typography variant="sm">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo
           </Typography>
         </Msg>
-        <Msg isUser={true} showAvatar={false} showDateAndTime={false}>
+        <Msg isUser showAvatar={false} showDateAndTime={false}>
           <Typography variant="sm">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo
           </Typography>
         </Msg>
-        <Msg isUser={true} showAvatar={false} showDateAndTime={false}>
+        <Msg isUser showAvatar={false} showDateAndTime={false}>
           <Typography variant="sm">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo
           </Typography>
         </Msg>
-        <Msg isUser={true} showAvatar={false} showDateAndTime={false}>
+        <Msg isUser showAvatar={false} showDateAndTime={false}>
           <Typography variant="sm">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo
           </Typography>
         </Msg>
-        <Msg isUser={true}>
+        <Msg isUser>
           <Typography variant="sm">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo
             doloremque ullam mollitia error fugit? Nostrum corrupti aliquam
@@ -149,8 +151,8 @@ function Message({ className }) {
         <Input
           className="bg-woodsmoke-200 dark:bg-woodsmoke-600 pr-14"
           placeholder="Type a message"
-          endIcon={(className) => (
-            <IoSend className={twMerge(className, "text-xl")} />
+          endIcon={(_className: any) => (
+            <IoSend className={twMerge(_className, "text-xl")} />
           )}
         />
       </footer>

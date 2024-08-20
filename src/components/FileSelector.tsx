@@ -31,7 +31,7 @@ function FileSelector({ reset = false }) {
     noKeyboard: true,
   });
 
-  const loading = isFileDialogActive | isFocused | isDragActive;
+  const loading = isFileDialogActive || isFocused || isDragActive;
 
   return (
     <div>
@@ -70,7 +70,7 @@ function FileSelector({ reset = false }) {
 
       {acceptedFiles ? (
         <div className="grid grid-cols-3 gap-4 mt-4">
-          {acceptedFiles?.map((file) => (
+          {acceptedFiles?.map((file: any) => (
             <AttachmentCard
               key={file.path}
               fileName={file.path}

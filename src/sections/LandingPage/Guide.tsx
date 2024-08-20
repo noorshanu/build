@@ -2,13 +2,13 @@ import Typography from "components/Typography";
 import useMediaQuery from "hooks/useMediaQuery";
 import { useTranslation } from "react-i18next";
 
-const Card = ({ showLine = true, title, disc }) => {
+const Card = ({ showLine = true, title, disc }: any) => {
   return (
     <div className="flex space-x-4">
       <div className="flex flex-col items-center">
-        <div className="w-4 h-4 rounded-full bg-black dark:bg-white"></div>
+        <div className="w-4 h-4 rounded-full bg-black dark:bg-white" />
         {showLine ? (
-          <div className="flex-1 w-[2px] bg-black dark:bg-white"></div>
+          <div className="flex-1 w-[2px] bg-black dark:bg-white" />
         ) : null}
       </div>
 

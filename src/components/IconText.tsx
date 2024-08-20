@@ -1,7 +1,7 @@
 import { twMerge } from "tailwind-merge";
 import Typography from "./Typography";
 
-function IconText({ icon, title, iconClassName, sizeVariant = "sm" }) {
+function IconText({ icon, title, iconClassName, sizeVariant = "sm" }: any) {
   return (
     <div>
       <Typography

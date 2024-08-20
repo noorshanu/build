@@ -2,7 +2,7 @@ import Paper from "./Paper";
 import Table from "./Table";
 import Typography from "./Typography";
 
-function WalletTxHistory({ title, subtitle }) {
+function WalletTxHistory({ title, subtitle }: any) {
   return (
     <Paper>
       {title ? (
@@ -82,7 +82,7 @@ function WalletTxHistory({ title, subtitle }) {
             </Typography>,
           ],
         ]}
-      ></Table>
+      />
     </Paper>
   );
 }

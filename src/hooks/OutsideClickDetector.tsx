@@ -1,10 +1,10 @@
 import { useEffect, useRef, useCallback } from "react";
 
-const OutsideClickDetector = (handler, enabled) => {
-  const ref = useRef(null);
+const OutsideClickDetector = (handler: () => void, enabled: boolean) => {
+  const ref = useRef<any>(null);
 
   const handleClick = useCallback(
-    (event) => {
+    (event: any) => {
       if (enabled && ref.current && !ref.current.contains(event.target)) {
         handler();
       }
@@ -22,7 +22,9 @@ const OutsideClickDetector = (handler, enabled) => {
       return cleanup;
     }
 
-    cleanup();
+    return () => {
+      cleanup();
+    };
   }, [handleClick, enabled]);
 
   return ref;

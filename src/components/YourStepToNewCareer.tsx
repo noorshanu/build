@@ -1,4 +1,3 @@
-import { MdDone } from "react-icons/md";
 import Typography from "./Typography";
 import SearchBox from "./SearchBox";
 import { useTranslation } from "react-i18next";
@@ -14,34 +13,19 @@ function YourStepToNewCareer() {
         </Typography>
 
         <div className="space-y-2">
-          <Typography
-            variant="sm"
-            startIcon={
-              <MdDone className="inline-block text-green-haze-500 align-top relative top-[.15em]" />
-            }
-          >
+          <Typography variant="sm">
             <span className="inline-block">
               {t("Learn faster with us and become the whole new person.")}
             </span>
           </Typography>
 
-          <Typography
-            variant="sm"
-            startIcon={
-              <MdDone className="inline-block text-green-haze-500 align-top relative top-[.15em]" />
-            }
-          >
+          <Typography variant="sm">
             <span className="inline-block">
               {t("Find the Best jobs according to your experience.")}
             </span>
           </Typography>
 
-          <Typography
-            variant="sm"
-            startIcon={
-              <MdDone className="inline-block text-green-haze-500 align-top relative top-[.15em]" />
-            }
-          >
+          <Typography variant="sm">
             <span className="inline-block">
               {t("Explore the world wide experience.")}
             </span>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import Button from "components/Button";
 import Typography from "components/Typography";
@@ -13,7 +13,7 @@ function ResetPassword() {
   const [isSuccessful, setIsSuccessful] = useState(false);
   const { token } = useParams();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     try {

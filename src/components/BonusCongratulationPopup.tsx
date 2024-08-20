@@ -1,7 +1,7 @@
 import Button from "./Button";
 import Typography from "./Typography";
 
-function BonusCongratulationPopup({ handleClose }) {
+function BonusCongratulationPopup({ handleClose }: any) {
   return (
     <div className="pt-10 pb-8 px-6 bg-green-haze-100 z-10 relative rounded-xl border-[6px] border-green-haze-400 shadow-2xl shadow-green-haze-600 text-black">
       <img

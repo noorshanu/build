@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+// @ts-nocheck
+
+import React, { useState } from "react";
 import Button from "components/Button";
 import Input from "components/Input";
 import Typography from "components/Typography";
 import PageLayout from "layouts/PageLayout";
 
 function PostJobs({ onNext }) {
-
-/*   const history = useHistory();
+  /*   const history = useHistory();
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -15,13 +16,12 @@ function PostJobs({ onNext }) {
     }
   }, [token, history]);  */
 
-
   // Inizializza lo stato locale per gestire i dettagli del lavoro
   const [jobDetails, setJobDetails] = useState({
-    jobTitle: '',
-    jobType: '',
-    jobTiming: '',
-    jobRequirements: '',
+    jobTitle: "",
+    jobType: "",
+    jobTiming: "",
+    jobRequirements: "",
   });
 
   // Aggiorna lo stato locale quando i campi di input cambiano
@@ -33,7 +33,7 @@ function PostJobs({ onNext }) {
   // Gestisce il clic sul pulsante "Next", passando i dettagli del lavoro al componente padre
   const handleNextClick = () => {
     // Add validation here
-        onNext(jobDetails); // Passa i dettagli del lavoro al componente padre
+    onNext(jobDetails); // Passa i dettagli del lavoro al componente padre
   };
 
   return (

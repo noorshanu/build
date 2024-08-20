@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge";
 
-function TabBar({ children, className, showLine = true }) {
+function TabBar({ children, className, showLine = true }: any) {
   return (
     <div>
       <div className={twMerge("flex", className)}>{children}</div>

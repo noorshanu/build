@@ -1,7 +1,7 @@
 import useDelayUnmount from "hooks/useDelayUnmount";
 import Portal from "./Portal";
 
-function TransitionWrapper({ children, className, open }) {
+function TransitionWrapper({ children, className, open }: any) {
   const shouldRender = useDelayUnmount(open, 300);
 
   const portalStyle = { zIndex: 100000000 };
@@ -26,7 +26,7 @@ function TransitionWrapper({ children, className, open }) {
                 open ? "show" : "hide"
               }`}
               style={blackScreenStyle}
-            ></div>
+            />
           </Portal>
         </>
       )}

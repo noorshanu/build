@@ -1,8 +1,7 @@
-import React from 'react';
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import Button from "./Button";
 
-function Pagination({ totalPages, currentPage, onPageChange }) {
+function Pagination({ totalPages, currentPage, onPageChange }: any) {
   // Genera un array di numeri di pagina da mostrare nella paginazione
   const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
 
@@ -15,11 +14,11 @@ function Pagination({ totalPages, currentPage, onPageChange }) {
       >
         <FaChevronLeft />
       </Button>
-      {pages.map(page => (
+      {pages.map((page) => (
         <Button
           key={page}
           onClick={() => onPageChange(page)}
-          className={`h-8 w-8 ${currentPage === page ? 'bg-green-haze-600' : ''}`}
+          className={`h-8 w-8 ${currentPage === page ? "bg-green-haze-600" : ""}`}
         >
           {page}
         </Button>

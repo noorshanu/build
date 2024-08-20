@@ -1,7 +1,3 @@
-import Typography from "../Typography";
-
-import SelectBox from "components/SelectBox";
-import Pagination from "components/Pagination";
 import EmployerCard from "./EmployerCard";
 import PerPageItemsSelector from "components/PerPageItemsSelector";
 import StaticPagination from "components/StaticPagination";

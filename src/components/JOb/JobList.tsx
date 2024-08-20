@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useState, useEffect } from "react";
 import Typography from "../Typography";
 import JobCard from "./JobCard";
@@ -18,7 +20,7 @@ function JobList() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [jobsPerPage, setJobsPerPage] = useState(10); // Numero di lavori per pagina
-  const [totalPages, setTotalPages] = useState(0); // Numero totale di pagine
+  const [totalPages] = useState(0); // Numero totale di pagine
   const navigate = useNavigate(); // Hook per la navigazione
   const token = localStorage.getItem("token");
   const { t } = useTranslation();

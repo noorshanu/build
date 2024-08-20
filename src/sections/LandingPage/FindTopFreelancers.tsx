@@ -1,15 +1,15 @@
 import Typography from "components/Typography";
 import { useTranslation } from "react-i18next";
-import { FaStar } from "react-icons/fa";
 import { FiExternalLink } from "react-icons/fi";
 
-const Card = ({ serviceName, rating, icon }) => {
+const Card = ({ serviceName, rating, icon }: any) => {
   return (
     <div className="h-[72px] rounded-lg bg-woodsmoke-300 dark:bg-woodsmoke-700 px-5 flex items-center justify-between space-x-6 border-2 border-black/60 dark:border-white/60">
       <div className="flex items-center space-x-4">
         <img
           src={icon}
           className="w-9 flex-shrink-0 flex items-center justify-center opacity-80 dark:invert"
+          alt="icon"
         />
 
         <Typography className="font-medium text-woodsmoke-800 dark:text-white lh-1_2">
@@ -21,14 +21,7 @@ const Card = ({ serviceName, rating, icon }) => {
         {/* <Typography variant="sm" className="lh-1 mb-1">
           294 skills
         </Typography> */}
-        <Typography
-          variant="sm"
-          startIcon={
-            <FaStar className="inline-block text-[yellow] text-[1.1em] relative bottom-[.1em] mr-1" />
-          }
-        >
-          {rating}/5
-        </Typography>
+        <Typography variant="sm">{rating}/5</Typography>
       </div>
     </div>
   );
@@ -88,8 +81,8 @@ function FindTopFreelancers() {
         </div>
 
         <Typography>
-          {t("Seeking employment?")}{" "}
-          <a href="" className="underline text-green-haze-600">
+          {"Seeking employment?"}{" "}
+          <a href="/" className="underline text-green-haze-600">
             {t("Explore jobs")} <FiExternalLink className="inline-block" />
           </a>{" "}
         </Typography>

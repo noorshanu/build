@@ -5,7 +5,6 @@ import Pill from "components/Pill";
 import Typography from "components/Typography";
 import PageLayout from "layouts/PageLayout";
 import { BsThreeDots } from "react-icons/bs";
-import { FaRegCalendarAlt, FaReplyAll } from "react-icons/fa";
 
 const statusVariants = {
   0: { title: "Pending", className: "bg-white/20" },
@@ -13,10 +12,10 @@ const statusVariants = {
   2: { title: "Completed", className: "bg-woodsmoke-950" },
 };
 
-interface TicketCard {
+interface TicketCardType {
   status: keyof typeof statusVariants;
 }
-const TicketCard = ({ status = 0 }: TicketCard) => {
+const TicketCard = ({ status = 0 }: TicketCardType) => {
   return (
     <Paper>
       <header className="flex items-center justify-between mb-5">
@@ -60,23 +59,11 @@ const TicketCard = ({ status = 0 }: TicketCard) => {
           <Avatar size={38} title="David Smith" />
         </div>
 
-        <Typography
-          className="opacity-60"
-          variant="xs"
-          startIcon={
-            <FaRegCalendarAlt className="inline-block relative bottom-[.2em] text-[1.3em] mr-[.2em]" />
-          }
-        >
+        <Typography className="opacity-60" variant="xs">
           Date: 12/02/2020
         </Typography>
 
-        <Typography
-          className="opacity-60"
-          variant="xs"
-          startIcon={
-            <FaReplyAll className="inline-block text-[1.4em] relative top-[-.1em] mr-[.4em]" />
-          }
-        >
+        <Typography className="opacity-60" variant="xs">
           Last reply: 2 days ago
         </Typography>
       </footer>
@@ -93,9 +80,7 @@ const CustomerSupportPage = () => {
             My Ticket
           </Typography>
 
-          <Button size="sm" as="a" href="/ticket-request">
-            Create New Ticket
-          </Button>
+          <Button size="sm">Create New Ticket</Button>
         </header>
 
         <div className="space-y-5">

@@ -1,10 +1,15 @@
 import Avatar from "components/Avatar";
-import Button from "components/Button";
+import Button, { ButtonProps } from "components/Button";
 import Paper from "components/Paper";
 import Typography from "components/Typography";
-import { MdDone } from "react-icons/md";
 
-const Card = ({ title, buttonProps }) => {
+const Card = ({
+  title,
+  buttonProps,
+}: {
+  title: string;
+  buttonProps: ButtonProps;
+}) => {
   return (
     <div>
       <Paper className="rounded-b-none">
@@ -17,13 +22,7 @@ const Card = ({ title, buttonProps }) => {
 
         <div className="space-y-2">
           {new Array(4).fill("").map((_, i) => (
-            <Typography
-              className="flex"
-              key={i}
-              startIcon={
-                <MdDone className="mr-[.4em] text-green-haze-400 text-[1.1em] relative top-[.1em] flex-shrink-0" />
-              }
-            >
+            <Typography className="flex" key={i}>
               <span>Lorem ipsum dolor, sit amet consectetur</span>
             </Typography>
           ))}

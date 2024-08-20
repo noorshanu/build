@@ -3,7 +3,7 @@ import Button from "./Button";
 import Checkbox from "./Checkbox";
 import Typography from "./Typography";
 
-const CheckBoxWithIndicator = ({ isChecked, onChange, label, number }) => {
+const CheckBoxWithIndicator = ({ isChecked, onChange, label, number }: any) => {
   return (
     <div className="flex items-center justify-between">
       <Checkbox isChecked={isChecked} onChange={onChange} label={label} />

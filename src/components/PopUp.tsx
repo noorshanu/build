@@ -1,7 +1,6 @@
-import React from 'react';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes } from "react-icons/fa";
 
-const PopUp = ({ isOpen, onClose, children }) => {
+const PopUp = ({ isOpen, onClose, children }: any) => {
   return (
     <>
       {isOpen && (
@@ -17,7 +16,7 @@ const PopUp = ({ isOpen, onClose, children }) => {
           </div>
         </div>
       )}
-    </>  
+    </>
   );
 };
 

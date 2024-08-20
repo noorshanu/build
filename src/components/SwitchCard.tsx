@@ -30,7 +30,7 @@ const SwitchCard = forwardRef<HTMLButtonElement, Props>((props, ref) => {
         </span>
       ) : null}
 
-      <Typography as="span" variant="lg" className="capitalize flex-shrink-0">
+      <Typography variant="lg" className="capitalize flex-shrink-0">
         {title}
       </Typography>
     </Comp>

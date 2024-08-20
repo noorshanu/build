@@ -7,12 +7,8 @@ import {
 } from "react-icons/fa";
 import Typography from "./Typography";
 import Logo from "./Logo";
-import { useTranslation } from "react-i18next";
 
 function Footer() {
-  const { t } = useTranslation();
-  // document.body.dir = i18n.dir();
-
   return (
     <footer className="bg-white dark:bg-woodsmoke-950 pt-10 lg:pt-14 dark:text-white/80 text-black/80 shadow-2xl shadow-black">
       <div className="container-wrapper">
@@ -42,125 +38,130 @@ function Footer() {
 
           <div className="pt-3">
             <Typography
-              as="h4"
               variant="xl"
               className="text-green-haze-600 font-medium mb-6"
+              asChild
             >
-              {t("Company")}
+              <h4>{"Company"}</h4>
             </Typography>
 
             <div className="space-y-4 flex flex-col">
-              <Typography
-                as="a"
-                href="https://academy.deelance.com/"
-                target="_blank"
-              >
-                {t("Academy")}
+              <Typography asChild>
+                <a
+                  href="https://academy.deelance.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {"Academy"}
+                </a>
               </Typography>
-              <Typography
-                as="a"
-                href="https://academy.deelance.com/"
-                target="_blank"
-              >
-                {t("Blog")}
+              <Typography asChild>
+                <a
+                  rel="noreferrer"
+                  href="https://academy.deelance.com/"
+                  target="_blank"
+                >
+                  {"Blog"}
+                </a>
               </Typography>
-              <Typography
-                as="a"
-                href="https://deelance.com/en/team"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {t("Team")}
+              <Typography asChild>
+                <a
+                  href="https://deelance.com/en/team"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {"Team"}
+                </a>
               </Typography>
             </div>
           </div>
 
           <div className="pt-3">
             <Typography
-              as="h4"
               variant="xl"
               className="text-green-haze-600 font-medium mb-6"
             >
-              {t("Our Products")}
+              {"Our Products"}
             </Typography>
 
             <div className="space-y-4 flex flex-col">
-              <Typography
-                as="a"
-                href="https://faucet.deelance.com/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {t("Faucet")}
+              <Typography asChild>
+                <a
+                  href="https://faucet.deelance.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {"Faucet"}
+                </a>
               </Typography>
-              <Typography
-                as="a"
-                href="https://testnet.deelance.com/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {t("Deelance Testnet")}
+              <Typography asChild>
+                <a
+                  href="https://testnet.deelance.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {"Deelance Testnet"}
+                </a>
               </Typography>
-              <Typography
-                as="a"
-                href="https://stake.deelance.com/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {t("Staking Platform")}
+              <Typography asChild>
+                <a
+                  href="https://stake.deelance.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {"Staking Platform"}
+                </a>
               </Typography>
-              <Typography
-                as="a"
-                href="https://rewards.deelance.com/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {t("Withdraw")}
+              <Typography asChild>
+                <a
+                  href="https://rewards.deelance.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {"Withdraw"}
+                </a>
               </Typography>
-              <Typography
-                as="a"
-                href="https://nft.deelance.com/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Nfts
+              <Typography asChild>
+                <a
+                  href="https://nft.deelance.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Nfts
+                </a>
               </Typography>
             </div>
           </div>
 
           <div className="pt-3">
             <Typography
-              as="h4"
               variant="xl"
               className="text-green-haze-600 font-medium mb-6"
             >
-              {t("Contact")}
+              {"Contact"}
             </Typography>
 
             <div className="space-y-4">
-              <Typography as="a" href="/customer-support">
-                {t("Chat")}
-              </Typography>
-              <Typography>{t("Metaverse")}</Typography>
+              <Typography>{"Chat"}</Typography>
+              <Typography>{"Metaverse"}</Typography>
             </div>
           </div>
 
           <div className="pt-3">
             <Typography
-              as="h4"
               variant="xl"
               className="text-green-haze-600 font-medium mb-6"
             >
-              {t("Find")}
+              {"Find"}
             </Typography>
 
             <div className="space-y-4">
               <Typography>
                 {" "}
-                <a href="/">{t("Freelancers")}</a>
+                <a href="/">{"Freelancers"}</a>
               </Typography>
               <Typography>
-                <a href="/">{t("Jobs")}</a>
+                <a href="/">{"Jobs"}</a>
               </Typography>
             </div>
           </div>
@@ -170,20 +171,24 @@ function Footer() {
 
         <div className="py-8 flex max-lg:flex-col items-center justify-between dark:text-white/60 text-black/60 space-y-5">
           <div className="flex flex-wrap items-center [&>*]:mx-3 [&>*]:my-1 -my-1 -mx-3 max-lg:justify-center ">
-            <Typography as="a" href="/privacy&policy" target="_blank">
-              {t("Cookies Policy")}
+            <Typography asChild>
+              <a href="/privacy&policy" target="_blank">
+                {"Cookies Policy"}
+              </a>
             </Typography>
-            <Typography as="a" href="/privacy&policy" target="_blank">
-              {t("Privacy Policy")}
+            <Typography asChild>
+              <a href="/privacy&policy" target="_blank">
+                {"Privacy Policy"}
+              </a>
             </Typography>
-            <Typography as="a" href="/terms" target="_blank">
-              {t("Terms & Conditions")}
+            <Typography asChild>
+              <a href="/terms" target="_blank">
+                {"Terms & Conditions"}
+              </a>
             </Typography>
           </div>
 
-          <Typography>
-            {t("© 2023-24, deelance. All Right Reserved")}
-          </Typography>
+          <Typography>{"© 2023-24, deelance. All Right Reserved"}</Typography>
         </div>
       </div>
     </footer>

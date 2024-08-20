@@ -1,7 +1,7 @@
 import { twMerge } from "tailwind-merge";
 import Button from "./Button";
 
-const TabButton = ({ children, active, className, ...props }) => {
+const TabButton = ({ children, active, className, ...props }: any) => {
   return (
     <Button
       {...props}

@@ -1,9 +1,8 @@
-import React from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import Button from "./Button";
 import { Link } from "react-router-dom";
 
-function SuccessFull({ isOpen, onClose }) {
+function SuccessFull({ isOpen }: any) {
   return (
     <>
       {isOpen && (

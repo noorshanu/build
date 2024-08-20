@@ -27,7 +27,7 @@ function ForgotPassword() {
   });
   const loading = isSubmitting;
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     return new Promise((resolve) => {
       const resetEmail = async () => {
         try {
@@ -36,14 +36,14 @@ function ForgotPassword() {
           });
           setMessage("Check your email! ");
           setEmailSent(true);
-          resolve();
-        } catch (error) {
+          resolve("");
+        } catch (error: any) {
           if (error?.response?.data) {
             setError("email", { message: error.response.data });
           } else {
             setMessage("Error.. please try again!");
           }
-          resolve();
+          resolve("");
         }
       };
 
@@ -68,14 +68,14 @@ function ForgotPassword() {
             <Input
               type="email"
               placeholder="Enter Your Email"
-              disabled={emailSent | loading}
+              disabled={emailSent || loading}
               error={errors?.email?.message}
               {...register("email")}
             />
             <Button
               type="submit"
               className="w-full mt-6"
-              disabled={emailSent | loading}
+              disabled={emailSent || loading}
               loading={loading}
             >
               {emailSent ? "Email Sent" : "Submit"}

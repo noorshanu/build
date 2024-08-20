@@ -4,7 +4,7 @@ import { useAccount } from "wagmi";
 import { MdAccountBalanceWallet } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 
-export default function ConnectWalletButton({ children, ...props }) {
+export default function ConnectWalletButton({ children, ...props }: any) {
   const { t } = useTranslation();
 
   const { open } = useWeb3Modal();

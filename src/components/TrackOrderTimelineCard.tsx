@@ -1,7 +1,7 @@
 import { twMerge } from "tailwind-merge";
 import Typography from "./Typography";
 
-function TrackOrderTimelineCard({ title, active = false }) {
+function TrackOrderTimelineCard({ title, active = false }: any) {
   return (
     <div className={`relative z-10 overflow-hidden`}>
       <div className="flex items-center space-x-3">
@@ -10,7 +10,7 @@ function TrackOrderTimelineCard({ title, active = false }) {
             "w-7 h-7 rounded-full border-2 border-green-haze-600 bg-green-haze-600",
             active ? "bg-transparent" : null
           )}
-        ></div>
+        />
 
         <Typography
           variant="sm"
@@ -23,7 +23,7 @@ function TrackOrderTimelineCard({ title, active = false }) {
         </Typography>
       </div>
 
-      <div className="absolute top-7 left-[.87rem] w-[2px] h-full bg-green-haze-600 -z-10"></div>
+      <div className="absolute top-7 left-[.87rem] w-[2px] h-full bg-green-haze-600 -z-10" />
     </div>
   );
 }

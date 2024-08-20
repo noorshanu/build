@@ -44,10 +44,10 @@ function Accordion({
         )}
       >
         <Typography
-          as="span"
+          asChild
           className="transition-all duration-300 inline-block font-medium"
         >
-          {title}
+          <span>{title}</span>
         </Typography>
 
         <span

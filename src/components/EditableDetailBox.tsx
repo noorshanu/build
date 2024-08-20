@@ -1,7 +1,7 @@
 import { BsPencilFill } from "react-icons/bs";
-import { default as Typography } from "./Typography";
+import Typography from "./Typography";
 
-const EditableDetailBox = ({ title, children, onEditClick }) => {
+const EditableDetailBox = ({ title, children, onEditClick }: any) => {
   return (
     <div className="flex justify-between relative">
       <div className="flex-1">

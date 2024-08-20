@@ -1,10 +1,9 @@
 import Typography from "./Typography";
-import { MdMarkUnreadChatAlt } from "react-icons/md";
 import Button from "./Button";
 import { BsFillChatFill } from "react-icons/bs";
 import Paper from "./Paper";
 
-function SupportContact({ className }) {
+function SupportContact({ className }: { className?: string }) {
   return (
     <Paper className={className}>
       <Typography variant="lg" className="mb-5 font-medium">
@@ -25,11 +24,7 @@ function SupportContact({ className }) {
         </Button>
 
         <div>
-          <Typography
-            startIcon={
-              <MdMarkUnreadChatAlt className="text-green-haze-500 inline-block align-middle mr-[.2em]" />
-            }
-          >
+          <Typography>
             <span className="inline-block align-middle">
               Resolve Order Issues.
             </span>
@@ -39,7 +34,6 @@ function SupportContact({ className }) {
             <Button
               variant="warning-contained"
               className="mt-4 px-0 max-w-[10rem] w-full"
-              size="base"
             >
               Dispute
             </Button>

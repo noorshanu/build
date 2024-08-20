@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useEffect, useState } from "react";
 import {
   Dialog,
@@ -30,7 +32,7 @@ const Card = ({ nativeName, isActive, onClick }) => {
         )}
       >
         {isActive ? (
-          <span className="w-full h-full rounded-full bg-green-haze-500 block"></span>
+          <span className="w-full h-full rounded-full bg-green-haze-500 block" />
         ) : null}
       </span>
       <span>{nativeName}</span>

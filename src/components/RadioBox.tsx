@@ -18,6 +18,7 @@ const RadioBox = ({
   defaultChecked,
 }: Props) => {
   return (
+    // eslint-disable-next-line jsx-a11y/label-has-associated-control
     <label className="cursor-pointer flex items-center relative">
       <input
         className="radiobutton-input absolute"
@@ -30,7 +31,7 @@ const RadioBox = ({
         defaultChecked={defaultChecked}
       />
 
-      <div className="custom-radiobutton"></div>
+      <div className="custom-radiobutton" />
 
       {label && <span className="text-base">{label}</span>}
     </label>

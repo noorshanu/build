@@ -1,12 +1,16 @@
+// @ts-nocheck
+
+/* eslint-disable no-unsafe-optional-chaining */
 import Button from "components/Button";
 import TabBar from "components/TabBar";
 import PageLayout from "layouts/PageLayout";
-import React, { useContext, useEffect, useState } from "react";
+import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import AddEducation from "sections/SetProfilePage/AddEducation";
 import AddExperience from "sections/SetProfilePage/AddExperience";
 import AddService from "sections/SetProfilePage/AddService";
+
 import OtherDetails from "sections/SetProfilePage/OtherDetails";
 import SetProfile from "sections/SetProfilePage/SetProfile";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -197,7 +201,13 @@ const steps = [
   },
 ];
 
-export const FieldMessage = ({ children, className }) => {
+export const FieldMessage = ({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) => {
   return (
     <Typography className={twMerge("mt-3 opacity-60", className)}>
       {children}
@@ -217,11 +227,11 @@ function SetProfilePage() {
   const { data, isLoading: isProfileDataLoading } =
     useContext(ProfileDataContext);
 
-  const callApi = (data) => {
+  const callApi = (_data) => {
     return new Promise((resolve) => {
       const func = async () => {
         try {
-          const response = await axios.post(`${BASE_URL}/set-profile`, data, {
+          const response = await axios.post(`${BASE_URL}/set-profile`, _data, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -238,10 +248,10 @@ function SetProfilePage() {
     });
   };
 
-  const onSubmit = (data) => {
-    console.log("onSubmit = ", data);
+  const onSubmit = (_data) => {
+    console.log("onSubmit = ", _data);
 
-    return callApi(data);
+    return callApi(_data);
   };
 
   const onNextClick = async () => {
@@ -351,7 +361,7 @@ function SetProfilePage() {
                   Back
                 </Button>
               ) : (
-                <span></span>
+                <span />
               )}
 
               <Button

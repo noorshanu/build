@@ -2,7 +2,6 @@ import Button from "components/Button";
 import Paper from "components/Paper";
 import Typography from "components/Typography";
 import PageLayout from "layouts/PageLayout";
-import { FaArrowLeft, FaRegCalendarAlt } from "react-icons/fa";
 import Message from "sections/OrderPage/Message";
 
 function TicketPage() {
@@ -10,17 +9,11 @@ function TicketPage() {
     <PageLayout>
       <div className="container-wrapper">
         <header className="flex items-center justify-between mb-8">
-          <Typography
-            startIcon={
-              <FaArrowLeft className="inline-block text-[.9em] relative mt-[-.2em] mr-[.6em] cursor-pointer" />
-            }
-            variant="2xl"
-            className="font-semibold"
-          >
+          <Typography variant="2xl" className="font-semibold">
             My Ticket
           </Typography>
 
-          <Button size="sm" as="a" href='/ticket-request'>Create New Ticket</Button>
+          <Button size="sm">Create New Ticket</Button>
         </header>
 
         <main className="grid grid-cols-[400px_1fr] gap-8">
@@ -43,13 +36,7 @@ function TicketPage() {
               Ac sit etiam velit, consequat est augue commodo non.
             </Typography>
 
-            <Typography
-              className="opacity-60 mb-3"
-              variant="xs"
-              startIcon={
-                <FaRegCalendarAlt className="inline-block relative bottom-[.2em] text-[1.3em] mr-[.2em]" />
-              }
-            >
+            <Typography className="opacity-60 mb-3" variant="xs">
               Date: 12/02/2020
             </Typography>
 

@@ -8,7 +8,7 @@ const HoverCard = HoverCardPrimitive.Root;
 const HoverCardTrigger = HoverCardPrimitive.Trigger;
 
 const HoverCardContent = forwardRef(
-  ({ className, align = "center", sideOffset = 4, ...props }, ref) => {
+  ({ className, align = "center", sideOffset = 4, ...props }: any, ref) => {
     const { top } = useWebsiteBoundry();
 
     return (
