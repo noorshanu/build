@@ -3,58 +3,29 @@
     "browser": true,
     "es2021": true
   },
-  "extends": [
-    "airbnb",
-    "airbnb-typescript",
-    "airbnb/hooks",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react/recommended",
-    "eslint-config-prettier",
-    "prettier",
-    "plugin:prettier/recommended"
-  ],
-  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": "latest",
-    "sourceType": "module",
-    "project": "./tsconfig.json"
+    "ecmaVersion": 12,
+    "sourceType": "module"
   },
-  "plugins": ["react", "@typescript-eslint", "eslint-plugin-prettier"],
+  "plugins": ["prettier"],
+  "extends": ["airbnb-base", "plugin:prettier/recommended"],
   "rules": {
-    "react/prop-types": "off",
-    "radix": "off",
-    "react/react-in-jsx-scope": "off",
-    "react/jsx-props-no-spreading": "off",
-    "react/jsx-curly-brace-presence": "off",
-    "react/jsx-no-useless-fragment": "off",
-    "no-empty-pattern": "off",
-    "jsx-a11y/heading-has-content": "off",
-    "no-alert": "off",
-    "import/extensions": "off",
-    "react/button-has-type": "off",
-    "@typescript-eslint/no-unused-vars": "off",
+    "no-restricted-syntax": "off",
+    "spaced-comment": "off",
+    "camelcase": "off",
+    "new-cap": "off",
+    "func-names": 0,
+    "object-shorthand": 0,
+    "no-underscore-dangle": 0,
+    "consistent-return": 0,
     "no-console": "off",
-    "import/order": "off",
-    "react/function-component-definition": "off",
-    "no-underscore-dangle": "off",
-    "react-hooks/exhaustive-deps": "off",
-    "react/jsx-no-constructed-context-values": "off",
-    "react/no-array-index-key": "off",
-    "@typescript-eslint/no-explicit-any": "off",
-    "react/no-unstable-nested-components": "off",
-    "react/require-default-props": "off",
-    "no-nested-ternary": "off",
-    "import/prefer-default-export": "off",
-    "react/no-unescaped-entities": "off",
-    "jsx-a11y/label-has-associated-control": "off",
-    "@typescript-eslint/ban-ts-comment": "off",
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "import/extensions": "off",
     "prettier/prettier": [
       "error",
       {
         "endOfLine": "auto"
       }
     ]
-  },
-
-  "ignorePatterns": ["dist", ".eslintrc.cjs"]
+  }
 }
