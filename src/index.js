@@ -17,36 +17,33 @@ app.use(cookieParser());
 
 app.use(express.json());
 
-// CORS setup for Express
-// app.use(
-//   cors({
-//     origin: 'http://localhost:3000', // Frontend URL
-//     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
-//     allowedHeaders: ['Content-Type', 'Authorization'],
-//     credentials: true,
-//     exposedHeaders: [
-//       'Content-Disposition',
-//       'X-Auth-Token',
-//       'Authorization',
-//       'Set-Cookie',
-//     ],
-//   }),
-// );
-//index me ye change krna hoga
 const allowedOrigins = [
   'http://localhost:3000',
+  'https://2b38-45-113-159-251.ngrok-free.app',
+  'https://freelance-api.deelance.com',
   'https://freelance.deelance.com',
-]; // Add more allowed origins if necessary
+  // Add more allowed origins if necessary
+];
 
+// Function to check if origin is allowed
+const checkOrigin = (origin, callback) => {
+  if (!origin) {
+    // Allow requests with no origin (like Postman or mobile apps)
+    return callback(null, true);
+  }
+
+  const trimmedOrigin = origin.replace(/\/$/, ''); // Remove trailing slash
+  if (allowedOrigins.includes(trimmedOrigin)) {
+    return callback(null, true);
+  }
+  console.error(`Blocked by CORS: ${origin}`);
+  return callback(new Error('Not allowed by CORS'));
+};
+
+// CORS setup for Express
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
+    origin: checkOrigin,
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -68,7 +65,7 @@ app.get('/', (req, res) => {
 // Socket.io setup with CORS
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000', //====Your frontend URL=====//
+    origin: checkOrigin,
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -76,50 +73,36 @@ const io = new Server(server, {
 });
 
 io.on('connection', socket => {
-  console.log('a user connected');
+  console.log('A user connected');
 
   // Handle chat message event
   socket.on('chat message', msg => {
-    console.log(`message: ${msg}`);
+    console.log(`Message: ${msg}`);
   });
 
   // Handle disconnect event
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    console.log('User disconnected');
   });
 });
 
 //==================production url======================//
-// mongoose
-//   .connect(process.env.MONGODB_URI_second, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//     serverSelectionTimeoutMS: 30000,
-//   })
-//   .then(() => {
-//     console.log(
-//       'MongoDB connected successfully',
-//       process.env.MONGODB_URI_second,
-//     );
-//   })
-//   .catch(err => {
-//     console.error('Error connecting to MongoDB:', err);
-//   });
-
-//======================platform url=====================//
 mongoose
-  .connect(process.env.MONGODB_URI_PRIMARY, {
+  .connect(process.env.MONGODB_URI_second, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 30000,
   })
   .then(() => {
-    console.log('MongoDB connected successfully');
+    console.log(
+      'MongoDB connected successfully',
+      process.env.MONGODB_URI_second,
+    );
   })
   .catch(err => {
     console.error('Error connecting to MongoDB:', err);
   });
-// Set io instance to app to be accessed in routes
+
 app.set('io', io);
 app.use('/', route);
 

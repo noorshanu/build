@@ -326,6 +326,8 @@ const emailverify = async (req, res) => {
 // =========================login User ==============================//
 
 const login = async (req, res) => {
+  // memoryCheck.js
+
   try {
     const { email, password } = req.body;
 
