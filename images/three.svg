@@ -1,0 +1,23 @@
+<svg width="20" height="21" viewBox="0 0 20 21" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="86.236%" gradientTransform="matrix(.5798 .81475 -.38016 .27054 .4 -.043)" id="yvkbmbvesa">
+            <stop stop-color="#8B3404" offset="0%"/>
+            <stop stop-color="#BA662B" offset="100%"/>
+        </radialGradient>
+        <filter x="-97.1%" y="-25.4%" width="292.4%" height="160.9%" filterUnits="objectBoundingBox" id="ui5uk0zhub">
+            <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur stdDeviation="2.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.136500219 0" in="shadowBlurOuter1"/>
+        </filter>
+        <text id="8p4vcanu8c" font-family="SteradianBlack, Steradian" font-size="12" font-weight="700" fill="#E4973E">
+            <tspan x="6.37" y="14">3</tspan>
+        </text>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <circle fill="url(#yvkbmbvesa)" cx="10" cy="10" r="10"/>
+        <g fill-rule="nonzero" fill="#E4973E" stroke="#BE5F1D" stroke-width=".5">
+            <use filter="url(#ui5uk0zhub)" xlink:href="#8p4vcanu8c"/>
+            <use xlink:href="#8p4vcanu8c"/>
+        </g>
+    </g>
+</svg>
