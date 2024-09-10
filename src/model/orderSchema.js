@@ -1,19 +1,52 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-  taskId: { type: mongoose.Schema.Types.ObjectId, ref: 'Task', required: true },
-  buyerId: {
+  freelancerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
-  // jobDescription: { type: String, required: true },
-  //paymentTerms: { type: String }, // Example: "50% upfront, 50% upon completion"
-  deadline: { type: Date, required: true },
-  finalPrice: { type: Number, required: true },
-  orderDate: { type: Date, default: Date.now },
+  clientId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  gigId: { type: mongoose.Schema.Types.ObjectId, ref: 'Task', required: true },
+  initialTransactionHash: { type: String },
+  total: { type: Number, required: true },
+  deadline: { type: Date },
+  delivered: { type: Boolean, default: false },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
+  status: {
+    type: String,
+    enum: [
+      'awaiting-freelancer-approval',
+      'active',
+      'delivered',
+      'completed',
+      'disputed',
+      'cancelled',
+      'freelancer-declined',
+      'client-withdrawn',
+    ],
+    default: 'awaiting-freelancer-approval',
+  },
+  dispute: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Dispute',
+  },
+  reasonForDecline: {
+    type: String,
+    maxlength: 160,
+    required: false,
+  },
+});
+
+orderSchema.pre('save', function (next) {
+  this.updatedAt = Date.now();
+  next();
 });
 
 const Order = mongoose.model('Order', orderSchema);
-
 module.exports = Order;

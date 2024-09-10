@@ -7,7 +7,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const { join } = require('path');
 const { Server } = require('socket.io');
-const route = require('./router/routes');
+const router = require('./router/routes');
 
 const app = express();
 const server = http.createServer(app);
@@ -104,7 +104,7 @@ mongoose
   });
 
 app.set('io', io);
-app.use('/', route);
+app.use('/', router);
 
 // Start the server
 server.listen(4000, () => {

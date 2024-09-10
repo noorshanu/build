@@ -44,6 +44,14 @@ const {
   searchApi,
   checkUsernameAvailable,
 } = require('../controller/userController');
+const {
+  createOrder,
+  getFreelancerOrders,
+  approveOrder,
+  declineOrder,
+  withdrawOrder,
+  declineOrderValidationRules,
+} = require('../controller/orderController');
 
 const {
   createtask,
@@ -85,7 +93,6 @@ const {
 } = require('../controller/msgController.js');
 
 const { CreateOffer, getOffer } = require('../controller/offerController.js');
-const { createOrder } = require('../controller/orderController.js');
 
 const { upload } = require('../middleware/multer');
 const { openChatWithPerson } = require('../controller/messageController.js');
@@ -340,7 +347,7 @@ router.post('/createoffer', authenticate, CreateOffer);
 router.get('/getoffer/:userId', authenticate, authorization, getOffer);
 
 //=================order router==============================//
-router.post('/order/:offerId', createOrder);
+// router.post('/order/:offerId', createOrder);
 
 router.get('/admin/all-users', authenticate, adminAuthorization, getAllUsers);
 router.post('/admin/delete-user', authenticate, adminAuthorization, deleteUser);
@@ -353,4 +360,15 @@ router.post(
 
 router.post('/check-username-avilable', checkUsernameAvailable);
 
-module.exports = router; // Exporting the router directly
+router.post('/order/initialize', authenticate, createOrder);
+router.get('/orders/freelancer/:status', authenticate, getFreelancerOrders);
+router.patch('/orders/:orderId/approve', authenticate, approveOrder);
+router.patch(
+  '/order/:orderId/decline',
+  authenticate,
+  declineOrderValidationRules,
+  declineOrder,
+);
+router.patch('/order/:orderId/withdraw', authenticate, withdrawOrder);
+
+module.exports = router;

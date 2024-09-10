@@ -1,216 +1,308 @@
-// const Offer = require('../model/offerModel');
-// const Order = require('../model/orderSchema');
-
-// const createOrder = async (req, res) => {
-//   const { offerId } = req.params;
-//   const { action } = req.body; // 'accept' or 'reject'
-
-//   try {
-//     const offer = await Offer.findById(offerId);
-//     if (!offer) {
-//       return res.status(404).json({ status: false, msg: 'Offer not found' });
-//     }
-
-//     if (offer.status !== 'pending') {
-//       return res.status(400).json({
-//         status: false,
-//         msg: 'Offer has already been accepted or rejected',
-//       });
-//     }
-
-//     if (action === 'accept') {
-//       offer.status = 'accepted';
-//       await offer.save();
-
-//       const finalPrice = offer.offerPrice || offer.task.initialPrice;
-
-//       const newOrder = new Order({
-//         taskId: offer.task,
-//         buyerId: offer.buyer,
-//         // jobDescription: offer.jobDescription,
-//         //paymentTerms: offer.paymentTerms,
-//         deadline: offer.deadline,
-//         finalPrice: finalPrice,
-//       });
-
-//       await newOrder.save();
-
-//       await Offer.findByIdAndDelete(offerId);
-
-//       return res.status(201).json({
-//         status: true,
-//         msg: 'Offer accepted and order created',
-//         order: newOrder,
-//       });
-//     }
-//     if (action === 'reject') {
-//       await Offer.findByIdAndDelete(offerId);
-
-//       return res
-//         .status(200)
-//         .json({ msg: 'Offer rejected and document deleted' });
-//     }
-//     return res
-//       .status(400)
-//       .json({ status: false, msg: 'Invalid action specified' });
-//   } catch (error) {
-//     console.error('Error processing offer action:', error);
-//     res.status(500).json({
-//       status: false,
-//       msg: 'An error occurred while processing the offer action',
-//     });
-//   }
-// };
-
-// module.exports = { createOrder };
-
-//=========================with email notfication =======================//
-const nodemailer = require('nodemailer');
-
-const Offer = require('../model/offerModel');
+const { check, validationResult } = require('express-validator');
 const Order = require('../model/orderSchema');
-const User = require('../model/userModel');
 const Task = require('../model/taskModel');
-
-const createOrderFromOffer = async offer => {
-  try {
-    const finalPrice = offer.offerPrice || offer.task.price;
-
-    const newOrder = new Order({
-      taskId: offer.task,
-      buyerId: offer.buyer,
-      // jobDescription: { type: String, required: true },
-      //paymentTerms: { type: String },
-      deadline: offer.deadline,
-      finalPrice: finalPrice,
-    });
-
-    // Save the new order
-    await newOrder.save();
-
-    return newOrder;
-  } catch (error) {
-    console.error('Error creating order:', error);
-    throw new Error('Could not create order');
-  }
-};
-
-const sendEmailNotification = async (fromEmail, toEmail, subject, message) => {
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.COMPANY_GMAIL,
-      pass: process.env.PASS,
-    },
-  });
-
-  const mailOptions = {
-    from: fromEmail,
-    to: toEmail,
-    subject: subject,
-    text: message,
-  };
-
-  try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email notification sent: ', info.messageId);
-  } catch (error) {
-    console.error('Error sending email notification:', error);
-  }
-};
+const User = require('../model/userModel');
 
 const createOrder = async (req, res) => {
-  const { offerId } = req.params;
-  const { action } = req.body;
-
   try {
-    const offer = await Offer.findById(offerId);
-    //console.log('Offer found:', offer);
+    const { gigId, initialTransactionHash } = req.body;
+    const client = req.user;
 
-    if (!offer) {
-      return res.status(404).json({ status: false, msg: 'Offer not found' });
-    }
-
-    if (offer.status === 'accepted') {
-      return res
-        .status(400)
-        .json({ status: false, msg: 'Offer has already been accepted' });
-    }
-
-    const task = await Task.findById(offer.task);
-    // console.log('Task found:', task);
-
-    if (!task) {
-      return res.status(404).json({ status: false, msg: 'Task not found' });
-    }
-
-    const client = await User.findById(task.userId).select('email  UserName');
-    //console.log('Client found:', client);
-
-    if (!client) {
-      return res.status(404).json({ status: false, msg: 'Client not found' });
-    }
-
-    const buyer = await User.findById(offer.buyer).select('email  UserName');
-    //console.log('Buyer found:', buyer);
-
-    if (!buyer) {
-      return res.status(404).json({ status: false, msg: 'Buyer not found' });
-    }
-
-    if (action === 'accepted') {
-      offer.status = 'accepted';
-      const order = await createOrderFromOffer(offer);
-      await offer.save();
-
-      const message = `Dear ${buyer.FirstName},\n\nWe are pleased to inform you that your offer has been accepted by ${client.FirstName} ${client.LastName}. Congratulations on securing this task! Please check your account for further details.\n\nBest regards,\n${client.FirstName} ${client.LastName}`;
-      await sendEmailNotification(
-        client.email,
-        buyer.email,
-        'Offer Accepted',
-        message,
-      );
-
-      return res.status(200).json({
-        status: true,
-        message: 'Order confirmed',
-        order,
-      });
-    }
-
-    if (action === 'rejected') {
-      offer.status = 'rejected';
-
-      const message = `Dear ${buyer.FirstName},\n\nWe regret to inform you that your offer has been rejected by ${client.FirstName} ${client.LastName}. Thank you for your interest and effort. We encourage you to check other available tasks that might interest you.\n\nBest regards,\nteam Deelance`;
-
-      await sendEmailNotification(
-        client.email,
-        buyer.email,
-        'Offer Rejected',
-        message,
-      );
-
-      await offer.save();
-      await Offer.findByIdAndDelete(offerId);
-
-      return res.status(200).json({
+    // Ensure the user is a client
+    if (client.accountType !== 'CLIENT') {
+      return res.status(403).json({
         status: false,
-        message: 'Offer rejected and document deleted',
+        message: 'Only clients can initialize orders.',
       });
     }
 
-    return res
-      .status(400)
-      .json({ status: false, msg: 'Invalid action specified' });
+    // Validate the gigId
+    const task = await Task.findById(gigId);
+    if (!task) {
+      return res.status(404).json({
+        status: false,
+        message: 'Gig not found.',
+      });
+    }
+
+    // Find the freelancer associated with the gig
+    const freelancer = await User.findById(task.userId);
+    if (!freelancer) {
+      return res.status(404).json({
+        status: false,
+        message: 'Freelancer not found.',
+      });
+    }
+
+    // Create a new order
+    const newOrder = new Order({
+      freelancerId: freelancer._id,
+      clientId: client._id,
+      gigId: task._id,
+      initialTransactionHash,
+      total: task.price,
+      status: 'awaiting-freelancer-approval', // Initial status
+    });
+
+    // Save the order
+    await newOrder.save();
+
+    return res.status(201).json({
+      status: true,
+      message:
+        'Order initialized successfully. Waiting for freelancer approval.',
+      order: newOrder,
+    });
   } catch (error) {
-    //console.error('Error confirming/rejecting order:', error);
+    console.error('Error initializing order:', error);
     return res.status(500).json({
       status: false,
-      msg: 'An error occurred while processing the action',
+      message: 'Failed to initialize order. Please try again later.',
     });
   }
 };
 
-module.exports = { createOrder };
+const getFreelancerOrders = async (req, res) => {
+  const { status } = req.params;
+
+  try {
+    // Ensure the user is a freelancer
+    // if (req.user.accountType !== accountType) {
+    //   return res.status(403).json({
+    //     status: false,
+    //     message: 'Only freelancers can view their orders.',
+    //   });
+    // }
+
+    const query = { status };
+
+    if (req.user.accountType === 'FREELANCER') {
+      query.freelancerId = req.user._id;
+    }
+
+    if (req.user.accountType === 'CLIENT') {
+      query.clientId = req.user._id;
+    }
+
+    // Find orders where the freelancer is the current user
+    const orders = await Order.find(query)
+      .populate('freelancerId', 'avatar title email UserName')
+      .populate('clientId', 'avatar UserName email') // Populating client details
+      .populate('gigId', 'title') // Populating gig details
+      .sort({ createdAt: -1 }); // Sorting orders by creation date
+
+    const aggregateQuery = {};
+
+    if (req.user.accountType === 'FREELANCER') {
+      aggregateQuery.freelancerId = req.user._id;
+    }
+
+    if (req.user.accountType === 'CLIENT') {
+      aggregateQuery.clientId = req.user._id;
+    }
+
+    // Count orders for each status
+    const statusCounts = await Order.aggregate([
+      { $match: aggregateQuery },
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // Convert statusCounts array into an object with status as key and count as value
+    const statusCountsMap = statusCounts.reduce((acc, cur) => {
+      acc[cur._id] = cur.count;
+      return acc;
+    }, {});
+
+    return res.status(200).json({
+      status: true,
+      message: 'Freelancer orders fetched successfully.',
+      orders,
+      counts: statusCountsMap,
+    });
+  } catch (error) {
+    console.error('Error fetching freelancer orders:', error);
+    return res.status(500).json({
+      status: false,
+      message: 'Failed to fetch freelancer orders. Please try again later.',
+    });
+  }
+};
+
+const approveOrder = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+
+    // Ensure the user is a freelancer
+    if (req.user.accountType !== 'FREELANCER') {
+      return res.status(403).json({
+        status: false,
+        message: 'Only freelancers can approve orders.',
+      });
+    }
+
+    // Find the order by ID
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({
+        status: false,
+        message: 'Order not found.',
+      });
+    }
+
+    // Ensure the current user is the freelancer associated with the order
+    if (order.freelancerId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        status: false,
+        message: 'You are not authorized to approve this order.',
+      });
+    }
+
+    // Ensure the order is in the correct status for approval
+    if (order.status !== 'awaiting-freelancer-approval') {
+      return res.status(400).json({
+        status: false,
+        message: 'Order cannot be approved in its current status.',
+      });
+    }
+
+    // Calculate and set the deadline based on the current date plus deliveryDays
+    const task = await Task.findById(order.gigId);
+    const deadline = new Date();
+    deadline.setDate(deadline.getDate() + task.deliveryDays);
+    order.deadline = deadline;
+
+    // Update the order status to active
+    order.status = 'active';
+    await order.save();
+
+    return res.status(200).json({
+      status: true,
+      message: 'Order approved successfully. Project started.',
+      order,
+    });
+  } catch (error) {
+    console.error('Error approving order:', error);
+    return res.status(500).json({
+      status: false,
+      message: 'Failed to approve order. Please try again later.',
+    });
+  }
+};
+
+const declineOrderValidationRules = [
+  check('reasonForDecline')
+    .isLength({ min: 20, max: 160 })
+    .withMessage(
+      'Reason for decline must be between 20 and 160 characters long.',
+    ),
+];
+
+const declineOrder = async (req, res) => {
+  const { orderId } = req.params;
+
+  // Validate the reason for decline
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    // Ensure the user is a freelancer
+    if (req.user.accountType !== 'FREELANCER') {
+      return res.status(403).json({
+        status: false,
+        message: 'Only freelancers can decline an order.',
+      });
+    }
+
+    // Find the order by ID and ensure the freelancer is the one assigned
+    const order = await Order.findOne({
+      _id: orderId,
+      freelancerId: req.user._id,
+    });
+
+    if (!order) {
+      return res.status(404).json({
+        status: false,
+        message:
+          'Order not found or you are not authorized to decline this order.',
+      });
+    }
+
+    // Update the order status to 'freelancer-declined' and set the reason for decline
+    order.status = 'freelancer-declined';
+    order.reasonForDecline = req.body.reasonForDecline;
+    await order.save();
+
+    return res.status(200).json({
+      status: true,
+      message: 'Order declined successfully.',
+      order,
+    });
+  } catch (error) {
+    console.error('Error declining order:', error);
+    return res.status(500).json({
+      status: false,
+      message: 'Failed to decline order. Please try again later.',
+    });
+  }
+};
+
+const withdrawOrder = async (req, res) => {
+  const { orderId } = req.params;
+
+  try {
+    // Ensure the user is a client
+    if (req.user.accountType !== 'CLIENT') {
+      return res.status(403).json({
+        status: false,
+        message: 'Only clients can withdraw an order.',
+      });
+    }
+
+    // Find the order by ID and ensure the client is the one assigned
+    const order = await Order.findOne({
+      _id: orderId,
+      clientId: req.user._id,
+    });
+
+    if (!order) {
+      return res.status(404).json({
+        status: false,
+        message:
+          'Order not found or you are not authorized to withdraw this order.',
+      });
+    }
+
+    // Update the order status to 'client-withdrawn'
+    order.status = 'client-withdrawn';
+    await order.save();
+
+    return res.status(200).json({
+      status: true,
+      message: 'Order withdrawn successfully.',
+      order,
+    });
+  } catch (error) {
+    console.error('Error withdrawing order:', error);
+    return res.status(500).json({
+      status: false,
+      message: 'Failed to withdraw order. Please try again later.',
+    });
+  }
+};
+
+module.exports = {
+  createOrder,
+  getFreelancerOrders,
+  approveOrder,
+  declineOrder,
+  withdrawOrder,
+  declineOrderValidationRules,
+};
