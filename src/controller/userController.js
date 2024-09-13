@@ -664,6 +664,7 @@ const getUser = async (req, res) => {
     const user = await User.findById(req.user._id).select(
       '-password -refreshToken',
     );
+
     if (!user) {
       return res.status(404).send('User not found');
     }
@@ -719,6 +720,7 @@ const Profile = async (req, res) => {
     user.otherDetails = req.body.otherDetails;
     user.country = req.body.country;
     user.external_profiles = req.body.external_profiles;
+    user.certificate = req.body.certificate;
 
     if (req.body.skills) {
       if (typeof req.body.skills === 'string') {

@@ -69,12 +69,12 @@ const createtask = async (req, res) => {
       return res.status(404).send('User not found');
     }
 
-    if (!user.is_profileCompleted) {
-      return res.status(400).json({
-        status: false,
-        msg: 'Please complete your profile first.',
-      });
-    }
+    // if (!user.is_profileCompleted) {
+    //   return res.status(400).json({
+    //     status: false,
+    //     msg: 'Please complete your profile first.',
+    //   });
+    // }
 
     const userTaskCount = await Task.countDocuments({ userId });
     if (userTaskCount >= 4) {
@@ -136,7 +136,7 @@ const gettaskById = async (req, res) => {
   try {
     const task = await Task.findById(taskId).populate(
       'userId',
-      ' email  UserName avatar title revision',
+      ' email  UserName avatar title revision wallet',
     );
     if (!task) {
       return res
