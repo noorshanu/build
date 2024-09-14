@@ -5,7 +5,7 @@ const User = require('../model/userModel');
 
 const createOrder = async (req, res) => {
   try {
-    const { gigId, initialTransactionHash } = req.body;
+    const { gigId, initialTransactionHash, BlockchainGigId } = req.body;
     const client = req.user;
 
     // Ensure the user is a client
@@ -40,6 +40,7 @@ const createOrder = async (req, res) => {
       clientId: client._id,
       gigId: task._id,
       initialTransactionHash,
+      BlockchainGigId: BlockchainGigId,
       total: task.price,
       status: 'awaiting-freelancer-approval', // Initial status
     });

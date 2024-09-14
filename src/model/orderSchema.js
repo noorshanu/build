@@ -12,6 +12,7 @@ const orderSchema = new mongoose.Schema({
     required: true,
   },
   gigId: { type: mongoose.Schema.Types.ObjectId, ref: 'Task', required: true },
+  BlockchainGigId: { type: String },
   initialTransactionHash: { type: String },
   total: { type: Number, required: true },
   deadline: { type: Date },
