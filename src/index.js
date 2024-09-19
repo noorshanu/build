@@ -136,7 +136,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: true, // Allow all origins
-    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT', 'options'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
     exposedHeaders: [
@@ -147,7 +147,7 @@ app.use(
     ],
   }),
 );
-
+app.options('*', cors());
 // Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
