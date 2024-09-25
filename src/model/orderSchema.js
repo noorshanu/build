@@ -30,6 +30,7 @@ const orderSchema = new mongoose.Schema({
       'cancelled',
       'freelancer-declined',
       'client-withdrawn',
+      'revision',
     ],
     default: 'awaiting-freelancer-approval',
   },
@@ -37,6 +38,7 @@ const orderSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Dispute',
   },
+  revision: { type: Number, default: 0 },
   reasonForDecline: {
     type: String,
     maxlength: 160,

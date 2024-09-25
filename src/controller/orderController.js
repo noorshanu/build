@@ -33,6 +33,8 @@ const createOrder = async (req, res) => {
         message: 'Freelancer not found.',
       });
     }
+    const revisionCount = parseInt(task.revision.split(' ')[1], 10) || 0;
+    // Create a new order
 
     // Create a new order
     const newOrder = new Order({
@@ -43,6 +45,7 @@ const createOrder = async (req, res) => {
       BlockchainGigId: BlockchainGigId,
       total: task.price,
       status: 'awaiting-freelancer-approval', // Initial status
+      revision: revisionCount,
     });
 
     // Save the order
@@ -298,7 +301,113 @@ const withdrawOrder = async (req, res) => {
     });
   }
 };
+const freelancerCompleteOrder = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const order = await Order.findById(orderId);
 
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    if (
+      order.freelancerId.toString() !== req.user._id.toString() ||
+      req.user.accountType !== 'FREELANCER' //  check user is freelancer or not
+    ) {
+      return res.status(403).json({
+        message: 'Only the freelancer can mark the order as completed',
+      });
+    }
+
+    if (order.status === 'completed') {
+      return res.status(400).json({ message: 'Order already completed' });
+    }
+
+    // Mark the order as completed
+    order.status = 'completed';
+    await order.save();
+
+    res.json({ message: 'Order marked as completed', order });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to mark order as completed' });
+  }
+};
+
+const orderStatusDelivered = async (req, res) => {
+  const { orderId } = req.params; // Correctly destructuring orderId
+
+  try {
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res
+        .status(404)
+        .json({ status: false, msg: 'Order not found with this order ID' });
+    }
+
+    if (
+      order.clientId.toString() !== req.user._id.toString() ||
+      req.user.accountType !== 'CLIENT'
+    ) {
+      return res.status(403).json({
+        status: false,
+        msg: 'Only the client can mark the order as delivered',
+      });
+    }
+
+    order.status = 'delivered';
+    await order.save();
+
+    res.status(200).json({ status: true, msg: 'Order marked as delivered' });
+  } catch (error) {
+    res.status(500).json({ status: false, msg: 'Server error', error });
+  }
+};
+
+const orderStatusRevision = async (req, res) => {
+  const { orderId } = req.params;
+
+  try {
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({
+        status: false,
+        msg: 'Order not found with this order ID',
+      });
+    }
+
+    if (
+      order.clientId.toString() !== req.user._id.toString() ||
+      req.user.accountType !== 'CLIENT'
+    ) {
+      return res.status(403).json({
+        status: false,
+        msg: 'Only the client can request a revision',
+      });
+    }
+
+    if (order.revision > 0) {
+      order.revision -= 1;
+      order.status = 'revision';
+      await order.save();
+
+      return res.status(200).json({
+        status: true,
+        msg: `Revision requested, remaining revisions: ${order.revision}`,
+      });
+    }
+
+    return res.status(400).json({
+      status: false,
+      msg: 'You cannot request more revisions',
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      msg: 'Server error',
+      error: error.message,
+    });
+  }
+};
 module.exports = {
   createOrder,
   getFreelancerOrders,
@@ -306,4 +415,7 @@ module.exports = {
   declineOrder,
   withdrawOrder,
   declineOrderValidationRules,
+  freelancerCompleteOrder,
+  orderStatusDelivered,
+  orderStatusRevision,
 };

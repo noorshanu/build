@@ -51,6 +51,9 @@ const {
   declineOrder,
   withdrawOrder,
   declineOrderValidationRules,
+  freelancerCompleteOrder,
+  orderStatusDelivered,
+  orderStatusRevision,
 } = require('../controller/orderController');
 
 const {
@@ -370,5 +373,19 @@ router.patch(
   declineOrder,
 );
 router.patch('/order/:orderId/withdraw', authenticate, withdrawOrder);
-
+router.patch(
+  '/order/:orderId/ordercomplete',
+  authenticate,
+  freelancerCompleteOrder,
+);
+router.patch(
+  '/order/:orderId/orderDeliverd',
+  authenticate,
+  orderStatusDelivered,
+);
+router.patch(
+  '/order/:orderId/orderRevision',
+  authenticate,
+  orderStatusRevision,
+);
 module.exports = router;
