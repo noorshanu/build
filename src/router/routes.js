@@ -108,6 +108,13 @@ const registerFormValidation = require('../validations/registerFormValidation.js
 const {
   validateTaskTXStatusRule,
 } = require('../validations/taskValidationRules.js');
+const {
+  createDispute,
+  getDisputes,
+  resolveDispute,
+  updateDispute,
+  deleteDispute,
+} = require('../controller/disputeController.js');
 
 //= =======================user router==============================//
 
@@ -388,4 +395,12 @@ router.patch(
   authenticate,
   orderStatusRevision,
 );
+
+//======================dispute route================//
+router.post('/createDispute', authenticate, createDispute);
+router.get('/getDispute/:userId', authenticate, getDisputes);
+router.patch('/dispute/:disputeId/approve', authenticate, resolveDispute);
+router.delete('/dispute/:disputeId/delete', authenticate, deleteDispute);
+router.put('/updateDispute/:disputeId', authenticate, updateDispute);
+
 module.exports = router;
