@@ -6,7 +6,7 @@ const User = require('../model/userModel');
 
 // Function to create a new dispute
 const createDispute = async (req, res) => {
-  const { orderId, reason, description } = req.body;
+  const { orderId, reason } = req.body;
 
   if (!mongoose.isValidObjectId(orderId)) {
     return res
@@ -54,7 +54,6 @@ const createDispute = async (req, res) => {
       clientId,
       freelancerId,
       reason,
-      description,
       initiatedBy: req.user._id,
       status: 'open',
       createdAt: Date.now(),
@@ -84,7 +83,11 @@ const getDisputes = async (req, res) => {
     })
       .populate('orderId', 'total status')
       .populate('freelancerId clientId initiatedBy', 'name email');
-
+    if (disputes.length === 0) {
+      return res
+        .status(404)
+        .json({ status: false, msg: 'No disputes found for this userId' });
+    }
     return res.status(200).json({ status: true, disputes });
   } catch (error) {
     console.error('Error fetching disputes:', error);
@@ -95,10 +98,10 @@ const getDisputes = async (req, res) => {
 };
 
 const updateDispute = async (req, res) => {
-  try {
-    const { disputeId } = req.params;
-    const { status, resolution } = req.body;
+  const { disputeId } = req.params;
+  const { reason } = req.body;
 
+  try {
     const dispute = await Dispute.findById(disputeId);
     if (!dispute) {
       return res
@@ -106,29 +109,31 @@ const updateDispute = async (req, res) => {
         .json({ status: false, message: 'Dispute not found' });
     }
 
-    // Ensure the status is valid
-    const validStatuses = ['open', 'resolved', 'cancelled'];
-    if (status && !validStatuses.includes(status)) {
-      return res
-        .status(400)
-        .json({ status: false, message: 'Invalid dispute status' });
+    if (dispute.initiatedBy.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        status: false,
+        message: 'You are not authorized to update this dispute.',
+      });
     }
 
-    // Update dispute
-    if (status) dispute.status = status;
-    if (resolution) dispute.resolution = resolution;
+    if (reason) dispute.reason = reason;
 
     dispute.updatedAt = Date.now();
+
     await dispute.save();
 
-    return res
-      .status(200)
-      .json({ status: true, message: 'Dispute updated successfully', dispute });
+    return res.status(200).json({
+      status: true,
+      message: 'Dispute updated successfully',
+      dispute,
+    });
   } catch (error) {
     console.error('Error updating dispute:', error);
-    return res
-      .status(500)
-      .json({ status: false, message: 'Error updating dispute', error });
+    return res.status(500).json({
+      status: false,
+      message: 'Error updating dispute',
+      error,
+    });
   }
 };
 
@@ -179,6 +184,14 @@ const deleteDispute = async (req, res) => {
   try {
     const { disputeId } = req.params;
 
+    // Ensure only admins can delete disputes
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({
+        status: false,
+        message: 'Only an admin can delete disputes.',
+      });
+    }
+
     const dispute = await Dispute.findByIdAndDelete(disputeId);
     if (!dispute) {
       return res
@@ -197,11 +210,59 @@ const deleteDispute = async (req, res) => {
   }
 };
 
-// Export all functions
+const cancelDispute = async (req, res) => {
+  const { disputeId } = req.params;
+  const { cancellationReason } = req.body;
+
+  try {
+    const dispute = await Dispute.findById(disputeId);
+    if (!dispute) {
+      return res
+        .status(404)
+        .json({ status: false, message: 'Dispute not found.' });
+    }
+
+    // Check if the dispute has already been resolved
+    if (dispute.status === 'resolved') {
+      return res.status(400).json({
+        status: false,
+        message: 'Cannot cancel a resolved dispute.',
+      });
+    }
+
+    // Ensure only an admin can cancel the dispute
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({
+        status: false,
+        message: 'Only an admin can cancel the dispute.',
+      });
+    }
+
+    // Update the dispute status to 'cancelled' and add the cancellation reason
+    dispute.status = 'cancelled';
+    dispute.cancellationReason = cancellationReason;
+    dispute.updatedAt = Date.now();
+
+    await dispute.save();
+
+    return res.status(200).json({
+      status: true,
+      message: 'Dispute cancelled successfully.',
+      dispute,
+    });
+  } catch (error) {
+    console.error('Error cancelling dispute:', error);
+    return res
+      .status(500)
+      .json({ status: false, message: 'Failed to cancel dispute.' });
+  }
+};
+
 module.exports = {
   createDispute,
   getDisputes,
   updateDispute,
   resolveDispute,
   deleteDispute,
+  cancelDispute,
 };

@@ -30,6 +30,10 @@ const disputeSchema = new mongoose.Schema({
     enum: ['open', 'resolved', 'cancelled'],
     default: 'open',
   },
+  cancellationReason: {
+    type: String,
+    required: false,
+  },
   resolution: {
     resolvedBy: {
       type: mongoose.Schema.Types.ObjectId,
