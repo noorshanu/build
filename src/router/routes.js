@@ -115,6 +115,7 @@ const {
   updateDispute,
   deleteDispute,
   cancelDispute,
+  getAllDisputes,
 } = require('../controller/disputeController.js');
 
 //= =======================user router==============================//
@@ -404,5 +405,6 @@ router.patch('/dispute/:disputeId/approve', authenticate, resolveDispute);
 router.delete('/dispute/:disputeId/delete', authenticate, deleteDispute);
 router.put('/updateDispute/:disputeId', authenticate, updateDispute);
 router.patch('/dispute/:disputeId/cancel', authenticate, cancelDispute);
+router.get('/getDisputeDetails', authenticate, getAllDisputes);
 
 module.exports = router;

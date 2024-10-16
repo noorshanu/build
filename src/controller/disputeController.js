@@ -257,6 +257,54 @@ const cancelDispute = async (req, res) => {
       .json({ status: false, message: 'Failed to cancel dispute.' });
   }
 };
+const getAllDisputes = async (req, res) => {
+  try {
+    if (!req.user || req.user.role !== 'admin') {
+      return res.status(403).json({
+        status: false,
+        msg: 'Access denied. Only admins can view disputes.',
+      });
+    }
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+
+    const disputes = await Dispute.find({})
+      .populate('orderId', 'UserName total status')
+      .populate('clientId freelancerId initiatedBy', 'UserName email')
+      .limit(limit) // Set the limit of documents per page
+      .skip((page - 1) * limit) // Skip documents for pagination
+      .sort({ createdAt: -1 }); // Sort by the latest created disputes
+
+    const totalDisputes = await Dispute.countDocuments({});
+    const totalPages = Math.ceil(totalDisputes / limit);
+
+    if (disputes.length === 0) {
+      return res.status(404).json({
+        status: false,
+        msg: 'No disputes found.',
+      });
+    }
+
+    res.status(200).json({
+      status: true,
+      msg: 'Disputes fetched successfully.',
+      data: disputes,
+      pagination: {
+        total: totalDisputes,
+        page,
+        limit,
+        totalPages,
+      },
+    });
+  } catch (error) {
+    console.error('Error fetching disputes:', error);
+    res.status(500).json({
+      status: false,
+      msg: 'An error occurred while fetching disputes.',
+      error: error.message,
+    });
+  }
+};
 
 module.exports = {
   createDispute,
@@ -265,4 +313,5 @@ module.exports = {
   resolveDispute,
   deleteDispute,
   cancelDispute,
+  getAllDisputes,
 };
