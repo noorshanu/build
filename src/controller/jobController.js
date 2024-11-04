@@ -26,7 +26,7 @@ const jobPost = async (req, res) => {
   } = req.body;
 
   const _jobPost = new JobPostModel({
-    userId: req.userId, // from authenticate middleware
+    userId: req.user, // from authenticate middleware
     jobTitle,
     jobType,
     jobTiming,
@@ -63,7 +63,7 @@ const getJobUsingUserId = async (req, res) => {
     return res.status(404).send({ status: false, msg: 'Invalid userID' });
   }
 
-  if (req.userId !== userId) {
+  if (req.user._id.toString() !== userId.toString()) {
     return res.status(401).json({ status: false, msg: 'Unauthorized' });
   }
 

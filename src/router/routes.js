@@ -324,7 +324,7 @@ router.post('/change-mode', authenticate, changeMode);
 router.post('/post-job', authenticate, jobPost);
 router.get('/user/:userId/job-posts', authenticate, getJobUsingUserId);
 router.get('/api/jobs', authenticate, getJobs);
-router.get('/api/jobs/:jobId', getjobsjobId);
+router.get('/api/jobs/:jobId', authenticate, getjobsjobId);
 
 //======================savetask=====================//
 
