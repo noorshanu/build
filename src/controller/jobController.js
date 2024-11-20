@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const JobPostModel = require('../model/jobspostmodel');
 
 // const limiter = rateLimit({
-//     windowMs: 15 * 60 * 1000,
-//     max: 154500,
+//   windowMs: 15 * 60 * 1000,
+//   max: 154500,
 // });
 
 // app.use(limiter);
@@ -26,7 +26,7 @@ const jobPost = async (req, res) => {
   } = req.body;
 
   const _jobPost = new JobPostModel({
-    userId: req.user, // from authenticate middleware
+    userId: req.user._id, // from authenticate middleware
     jobTitle,
     jobType,
     jobTiming,
@@ -55,7 +55,6 @@ const jobPost = async (req, res) => {
   }
 };
 
-// Endpoint to get all job posts for a user
 const getJobUsingUserId = async (req, res) => {
   const { userId } = req.params;
 
@@ -91,6 +90,7 @@ const getjobsjobId = async (req, res) => {
       'userId',
       ' UserName email ',
     );
+
     if (!job) {
       return res
         .status(404)
@@ -127,4 +127,99 @@ const getJobs = async (req, res) => {
   }
 };
 
-module.exports = { jobPost, getJobUsingUserId, getJobs, getjobsjobId };
+const updateJob = async (req, res) => {
+  const { jobId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(jobId)) {
+    return res.status(400).json({ error: 'Invalid Job ID' });
+  }
+
+  try {
+    const updatedJob = await JobPostModel.findByIdAndUpdate(jobId, req.body, {
+      new: true,
+    });
+    if (!updatedJob) return res.status(404).json({ error: 'Job not found' });
+    res
+      .status(200)
+      .json({ message: 'Job updated successfully', job: updatedJob });
+  } catch (error) {
+    res.status(500).json({ error: 'Error updating job' });
+  }
+};
+
+const deletedJob = async (req, res) => {
+  const { jobId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(jobId)) {
+    return res.status(400).json({ error: 'Invalid Job ID' });
+  }
+
+  try {
+    const deletedJobs = await JobPostModel.findByIdAndDelete(jobId);
+    if (!deletedJobs) return res.status(404).json({ error: 'Job not found' });
+    res.status(200).json({ message: 'Job deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error deleting job' });
+  }
+};
+
+const search = async (req, res, next) => {
+  const {
+    keyword,
+    salaryMin,
+    jobTitle,
+    salaryMax,
+    page = 1,
+    limit = 10,
+  } = req.query;
+  const searchCriteria = {};
+
+  if (keyword) {
+    searchCriteria.jobTitle = { $regex: keyword, $options: 'i' };
+  }
+  if (salaryMin) searchCriteria.salaryMin = { $gte: salaryMin };
+  if (salaryMax) searchCriteria.salaryMax = { $lte: salaryMax };
+  if (jobTitle) {
+    searchCriteria.jobTitle = { $regex: jobTitle, $options: 'i' };
+  }
+  try {
+    const jobs = await JobPostModel.find(searchCriteria)
+      .populate('userId', 'UserName email')
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+
+    const count = await JobPostModel.countDocuments(searchCriteria);
+
+    res.status(200).json({
+      totalPages: Math.ceil(count / limit),
+      currentPage: Number(page),
+      jobs: jobs.map(job => ({
+        _id: job._id,
+        jobTitle: job.jobTitle,
+        jobType: job.jobType,
+        jobTiming: job.jobTiming,
+        jobRequirements: job.jobRequirements,
+        salaryType: job.salaryType,
+        salaryMin: job.salaryMin,
+        salaryMax: job.salaryMax,
+        salaryRate: job.salaryRate,
+        supplementalPay: job.supplementalPay,
+        benefits: job.benefits,
+        language: job.language,
+        hiringAmount: job.hiringAmount,
+        hiringUrgency: job.hiringUrgency,
+        userId: job.userId,
+      })),
+    });
+  } catch (error) {
+    next(error); // Pass to error handler
+  }
+};
+
+module.exports = {
+  jobPost,
+  getJobUsingUserId,
+  getJobs,
+  getjobsjobId,
+  search,
+  deletedJob,
+  updateJob,
+};

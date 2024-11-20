@@ -80,6 +80,9 @@ const {
   getJobUsingUserId,
   getJobs,
   getjobsjobId,
+  search,
+  deletedJob,
+  updateJob,
 } = require('../controller/jobController.js');
 
 const {
@@ -325,6 +328,9 @@ router.post('/post-job', authenticate, jobPost);
 router.get('/user/:userId/job-posts', authenticate, getJobUsingUserId);
 router.get('/api/jobs', authenticate, getJobs);
 router.get('/api/jobs/:jobId', authenticate, getjobsjobId);
+router.get('/search', authenticate, search);
+router.put('/updateJobs:/jobId', authenticate, updateJob);
+router.delete('/delete/:jobId', authenticate, deletedJob);
 
 //======================savetask=====================//
 
