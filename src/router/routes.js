@@ -46,6 +46,7 @@ const {
 } = require('../controller/userController');
 const {
   createOrder,
+  getOrder,
   getFreelancerOrders,
   approveOrder,
   declineOrder,
@@ -377,8 +378,9 @@ router.post(
 );
 
 router.post('/check-username-avilable', checkUsernameAvailable);
-
+//========================order===============================//
 router.post('/order/initialize', authenticate, createOrder);
+router.get('/order/:orderID', authenticate, getOrder);
 router.get('/orders/freelancer/:status', authenticate, getFreelancerOrders);
 router.patch('/orders/:orderId/approve', authenticate, approveOrder);
 router.patch(

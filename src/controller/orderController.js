@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const { check, validationResult } = require('express-validator');
 const Order = require('../model/orderSchema');
 const Task = require('../model/taskModel');
@@ -62,6 +63,38 @@ const createOrder = async (req, res) => {
     return res.status(500).json({
       status: false,
       message: 'Failed to initialize order. Please try again later.',
+    });
+  }
+};
+
+const getOrder = async (req, res) => {
+  try {
+    const { orderID } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(orderID)) {
+      return res.status(400).json({
+        status: false,
+        msg: 'Please provide a valid Order ID to fetch order details.',
+      });
+    }
+
+    const order = await Order.findById(orderID);
+    if (!order) {
+      return res.status(404).json({
+        status: false,
+        msg: 'Order not found with the given Order ID.',
+      });
+    }
+
+    res.status(200).json({
+      status: true,
+      data: order,
+    });
+  } catch (error) {
+    console.error('Error fetching order:', error.message);
+    res.status(500).json({
+      status: false,
+      msg: 'An error occurred while fetching the order. Please try again later.',
     });
   }
 };
@@ -410,6 +443,7 @@ const orderStatusRevision = async (req, res) => {
 };
 module.exports = {
   createOrder,
+  getOrder,
   getFreelancerOrders,
   approveOrder,
   declineOrder,
