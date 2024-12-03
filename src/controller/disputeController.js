@@ -1,4 +1,9 @@
 const mongoose = require('mongoose');
+const deleteImagesInUploadsFolder = require('../utils/deleteuploadsimages');
+const {
+  uploadOnCloudinary,
+  deleteTaskFromCloudinary,
+} = require('../utils/cloudinary');
 const Dispute = require('../model/disputeModel');
 const Order = require('../model/orderSchema');
 // eslint-disable-next-line no-unused-vars
@@ -48,12 +53,22 @@ const createDispute = async (req, res) => {
           'You are not authorized to initiate this dispute. Only the client or freelancer can initiate a dispute.',
       });
     }
+    const uploadPromises = req.files.map(async file => {
+      const uploadResult = await uploadOnCloudinary(file.path);
+      if (!uploadResult || !uploadResult.url) {
+        throw new Error('Image not uploaded to Cloudinary');
+      }
+      return { url: uploadResult.url };
+    });
+
+    const uploadedImages = await Promise.all(uploadPromises);
 
     const newDispute = new Dispute({
       orderId,
       clientId,
       freelancerId,
       reason,
+      images: uploadedImages,
       initiatedBy: req.user._id,
       status: 'open',
       createdAt: Date.now(),
@@ -67,10 +82,11 @@ const createDispute = async (req, res) => {
       dispute: newDispute,
     });
   } catch (error) {
-    console.error('Error creating dispute:', error);
-    return res
-      .status(500)
-      .json({ status: false, message: 'Failed to create dispute.' });
+    console.error('Error creating task:', error);
+    await deleteImagesInUploadsFolder();
+    res.status(500).send({ status: false, msg: 'Server error' });
+  } finally {
+    await deleteImagesInUploadsFolder();
   }
 };
 
@@ -97,18 +113,70 @@ const getDisputes = async (req, res) => {
   }
 };
 
+// const updateDispute = async (req, res) => {
+//   const { disputeId } = req.params;
+//   const { reason } = req.body;
+
+//   try {
+//     const dispute = await Dispute.findById(disputeId);
+//     if (!dispute) {
+//       return res
+//         .status(404)
+//         .json({ status: false, message: 'Dispute not found' });
+//     }
+//     const uploadPromises = req.files.map(async file => {
+//       const uploadResult = await uploadOnCloudinary(file.path);
+//       if (!uploadResult || !uploadResult.url) {
+//         throw new Error('Image not uploaded to Cloudinary');
+//       }
+//       return { url: uploadResult.url };
+//     });
+
+//     const uploadedImages = await Promise.all(uploadPromises);
+
+//     if (dispute.initiatedBy.toString() !== req.user._id.toString()) {
+//       return res.status(403).json({
+//         status: false,
+//         message: 'You are not authorized to update this dispute.',
+//       });
+//     }
+
+//     if (reason) dispute.reason = reason;
+//     if (images) dispute.images = uploadedImages;
+
+//     dispute.updatedAt = Date.now();
+
+//     await dispute.save();
+
+//     return res.status(200).json({
+//       status: true,
+//       message: 'Dispute updated successfully',
+//       dispute,
+//     });
+//   } catch (error) {
+//     console.error('Error updating dispute:', error);
+//     return res.status(500).json({
+//       status: false,
+//       message: 'Error updating dispute',
+//       error,
+//     });
+//   }
+// };
 const updateDispute = async (req, res) => {
   const { disputeId } = req.params;
   const { reason } = req.body;
 
   try {
+    // Fetch the dispute by ID
     const dispute = await Dispute.findById(disputeId);
     if (!dispute) {
-      return res
-        .status(404)
-        .json({ status: false, message: 'Dispute not found' });
+      return res.status(404).json({
+        status: false,
+        message: 'Dispute not found',
+      });
     }
 
+    // Ensure only the initiator can update the dispute
     if (dispute.initiatedBy.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         status: false,
@@ -116,8 +184,24 @@ const updateDispute = async (req, res) => {
       });
     }
 
-    if (reason) dispute.reason = reason;
+    // Handle image uploads
+    let uploadedImages = [];
+    if (req.files && req.files.length > 0) {
+      const uploadPromises = req.files.map(async file => {
+        const uploadResult = await uploadOnCloudinary(file.path);
+        if (!uploadResult || !uploadResult.url) {
+          throw new Error('Image upload failed');
+        }
+        return { url: uploadResult.url };
+      });
+      uploadedImages = await Promise.all(uploadPromises);
+    }
 
+    // Update fields
+    if (reason) dispute.reason = reason;
+    if (uploadedImages.length > 0) {
+      dispute.images = [...dispute.images, ...uploadedImages];
+    }
     dispute.updatedAt = Date.now();
 
     await dispute.save();
@@ -129,11 +213,10 @@ const updateDispute = async (req, res) => {
     });
   } catch (error) {
     console.error('Error updating dispute:', error);
-    return res.status(500).json({
-      status: false,
-      message: 'Error updating dispute',
-      error,
-    });
+    await deleteImagesInUploadsFolder();
+    res.status(500).send({ status: false, msg: 'Server error' });
+  } finally {
+    await deleteImagesInUploadsFolder();
   }
 };
 
@@ -192,16 +275,41 @@ const deleteDispute = async (req, res) => {
       });
     }
 
-    const dispute = await Dispute.findByIdAndDelete(disputeId);
+    // Find the dispute before deletion
+    const dispute = await Dispute.findById(disputeId);
     if (!dispute) {
       return res
         .status(404)
         .json({ status: false, message: 'Dispute not found' });
     }
 
-    return res
-      .status(200)
-      .json({ status: true, message: 'Dispute deleted successfully' });
+    // Check if the dispute contains any images
+    const images = dispute.images.map(image => image.url);
+
+    if (images && images.length > 0) {
+      // Delete all images from Cloudinary first
+      const deleteImagePromises = images.map(imageUrl =>
+        deleteTaskFromCloudinary(imageUrl),
+      );
+      const deleteImageResults = await Promise.all(deleteImagePromises);
+
+      // If any image deletion fails, return an error
+      if (deleteImageResults.some(result => !result)) {
+        return res.status(400).json({
+          status: false,
+          msg: 'Failed to delete images from Cloudinary',
+        });
+      }
+    }
+
+    // After deleting images, delete the dispute
+    await Dispute.findByIdAndDelete(disputeId);
+
+    // Return success message
+    return res.status(200).json({
+      status: true,
+      message: 'Dispute and images deleted successfully',
+    });
   } catch (error) {
     console.error('Error deleting dispute:', error);
     return res
@@ -306,6 +414,65 @@ const getAllDisputes = async (req, res) => {
   }
 };
 
+const deleteDisputeImageByUrl = async (req, res) => {
+  try {
+    const { disputeId } = req.params.disputeId;
+    const { imageId } = req.params;
+    console.log(req.params.disputeId);
+    // console.log(req.params.imageId);
+
+    // Validate disputeId and imageId
+    if (
+      !mongoose.Types.ObjectId.isValid(disputeId) &&
+      !mongoose.Types.ObjectId.isValid(imageId)
+    ) {
+      return res.status(400).json({
+        status: false,
+        msg: 'Please provide a valid disputeId and imageId',
+      });
+    }
+
+    // Find the dispute by ID
+    const dispute = await Dispute.findById(req.params.disputeId);
+    // console.log(dispute);
+    if (!dispute) {
+      return res.status(404).json({ status: false, msg: 'Dispute not found' });
+    }
+
+    // Find the image to be deleted
+    // eslint-disable-next-line eqeqeq
+    const imageToDelete = dispute.images.find(image => image._id == imageId);
+    if (!imageToDelete) {
+      return res
+        .status(404)
+        .json({ status: false, msg: 'Image not found in dispute' });
+    }
+
+    // Delete the image from Cloudinary
+    const cloudinaryDeleted = await deleteTaskFromCloudinary(imageToDelete.url);
+
+    if (!cloudinaryDeleted) {
+      return res.status(500).json({
+        status: false,
+        msg: 'Failed to delete image from Cloudinary',
+      });
+    }
+
+    // Remove the image from the dispute's images array
+    dispute.images.pull(req.params.imageId);
+    await dispute.save();
+
+    res.status(200).json({
+      status: true,
+      msg: 'Dispute image deleted successfully!',
+      data: dispute,
+    });
+  } catch (error) {
+    console.error('Error deleting dispute image:', error.message);
+    res.status(500).json({ status: false, msg: 'Server error' });
+  }
+};
+
 module.exports = {
   createDispute,
   getDisputes,
@@ -314,4 +481,5 @@ module.exports = {
   deleteDispute,
   cancelDispute,
   getAllDisputes,
+  deleteDisputeImageByUrl,
 };

@@ -120,6 +120,7 @@ const {
   deleteDispute,
   cancelDispute,
   getAllDisputes,
+  deleteDisputeImageByUrl,
 } = require('../controller/disputeController.js');
 
 //= =======================user router==============================//
@@ -407,11 +408,28 @@ router.patch(
 );
 
 //======================dispute route================//
-router.post('/createDispute', authenticate, createDispute);
+router.post(
+  '/createDispute',
+  authenticate,
+  upload.array('images', 10),
+  createDispute,
+);
 router.get('/getDispute/:userId', authenticate, getDisputes);
 router.patch('/dispute/:disputeId/approve', authenticate, resolveDispute);
 router.delete('/dispute/:disputeId/delete', authenticate, deleteDispute);
-router.put('/updateDispute/:disputeId', authenticate, updateDispute);
+router.delete(
+  '/deleteImagedispute/:userId/:disputeId/:imageId',
+  authenticate,
+  authorization,
+  deleteDisputeImageByUrl,
+);
+router.put(
+  '/updateDispute/:userId/:disputeId',
+  authenticate,
+  authorization,
+  upload.array('images', 10),
+  updateDispute,
+);
 router.patch('/dispute/:disputeId/cancel', authenticate, cancelDispute);
 router.get('/getDisputeDetails', authenticate, getAllDisputes);
 

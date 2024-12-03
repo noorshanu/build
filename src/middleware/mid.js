@@ -47,6 +47,7 @@ const adminAuthorization = async (req, res, next) => {
 
 const authorization = async (req, res, next) => {
   try {
+    const userID = req.params.userId;
     const decodedToken = req.user._id;
 
     if (!decodedToken) {
@@ -55,7 +56,7 @@ const authorization = async (req, res, next) => {
         .send({ status: false, msg: 'Decoded token not found' });
     }
 
-    const clientId = req.user._id;
+    const clientId = userID;
 
     if (!clientId) {
       return res.status(401).send({ status: false, msg: 'userId is required' });

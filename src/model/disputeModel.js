@@ -16,6 +16,11 @@ const disputeSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  images: [
+    {
+      url: { type: String },
+    },
+  ],
   initiatedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
