@@ -34,11 +34,16 @@ const orderSchema = new mongoose.Schema({
     ],
     default: 'awaiting-freelancer-approval',
   },
+  files: [
+    {
+      type: String, // URL to Cloudinary or local file path
+    },
+  ],
   dispute: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Dispute',
   },
-  revision: { type: Number, default: 0 },
+  revision: { type: Number, default: 3 },
   reasonForDecline: {
     type: String,
     maxlength: 160,

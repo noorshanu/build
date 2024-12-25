@@ -123,6 +123,11 @@ const {
   deleteDisputeImageByUrl,
 } = require('../controller/disputeController.js');
 
+const {
+  jobIdproposals,
+  getproposals,
+} = require('../controller/proposalContoller.js');
+
 //= =======================user router==============================//
 
 router.post('/set-profile/:userId', authenticate, authorization, Profile); // Corrected route paths
@@ -273,10 +278,10 @@ router.post(
   upload.array('images', 10),
   createtask,
 );
-router.get('/task/:taskId', gettaskById);
-router.get('/tasks/user/:userId', gettasksUserByuserId);
+router.get('/task/:taskId', authenticate, gettaskById);
+router.get('/tasks/user/:userId', authenticate, gettasksUserByuserId);
 router.get('/tasks', gettask);
-router.get('/searchTask', searchTask);
+router.get('/searchTask', authenticate, searchTask);
 router.post(
   '/set-task-init-tx-status',
   authenticate,
@@ -391,9 +396,15 @@ router.patch(
   declineOrder,
 );
 router.patch('/order/:orderId/withdraw', authenticate, withdrawOrder);
+// router.patch(
+//   '/order/:orderId/ordercomplete',
+//   authenticate,
+//   freelancerCompleteOrder,
+// );
 router.patch(
   '/order/:orderId/ordercomplete',
-  authenticate,
+  // Assuming you have an authentication middleware
+  upload.array('files', 5), // Allow up to 5 files to be uploaded
   freelancerCompleteOrder,
 );
 router.patch(
@@ -432,5 +443,9 @@ router.put(
 );
 router.patch('/dispute/:disputeId/cancel', authenticate, cancelDispute);
 router.get('/getDisputeDetails', authenticate, getAllDisputes);
+
+//======================proposal controller===================//
+router.post('/proposals/:jobId', authenticate, jobIdproposals);
+router.get('/proposals/:jobId', authenticate, getproposals);
 
 module.exports = router;

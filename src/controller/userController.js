@@ -295,34 +295,6 @@ const emailverify = async (req, res) => {
   }
 };
 
-// const emailverify = async (req, res) => {
-//   const { token } = req.body;
-
-//   try {
-//     const verifyDocument = await verify.findOne({ verificationToken: token });
-//     if (!verifyDocument) {
-//       return res.status(404).send({ msg: 'Invalid verification token' });
-//     }
-
-//     // Create a new user from the verify document
-//     const newUser = new User({
-//       ...verifyDocument.toObject(), // Copy all fields from verifyDocument
-//       verified: true, // Mark the user as verified
-//       verificationToken: undefined, // Remove the verification token
-//     });
-
-//     // Save the new user to the database
-//     await newUser.save();
-
-//     // Delete the verify document
-//     await verify.deleteOne({ _id: verifyDocument._id });
-
-//     res.status(200).json({ msg: 'Email verified successfully' });
-//   } catch (error) {
-//     res.status(500).json({ msg: 'Error verifying email', error });
-//   }
-// };
-
 // =========================login User ==============================//
 
 const login = async (req, res) => {

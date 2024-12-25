@@ -1,8 +1,15 @@
+/* eslint-disable no-unused-vars */
 const mongoose = require('mongoose');
 const { check, validationResult } = require('express-validator');
 const Order = require('../model/orderSchema');
 const Task = require('../model/taskModel');
 const User = require('../model/userModel');
+const {
+  uploadOnCloudinary,
+
+  deleteTaskFromCloudinary,
+} = require('../utils/cloudinary');
+const deleteImagesInUploadsFolder = require('../utils/deleteuploadsimages');
 
 const createOrder = async (req, res) => {
   try {
@@ -34,7 +41,7 @@ const createOrder = async (req, res) => {
         message: 'Freelancer not found.',
       });
     }
-    const revisionCount = parseInt(task.revision.split(' ')[1], 10) || 0;
+    //const revisionCount = parseInt(task.revision.split(' ')[1], 10) || 0;
     // Create a new order
 
     // Create a new order
@@ -46,7 +53,6 @@ const createOrder = async (req, res) => {
       BlockchainGigId: BlockchainGigId,
       total: task.price,
       status: 'awaiting-freelancer-approval', // Initial status
-      revision: revisionCount,
     });
 
     // Save the order
@@ -334,9 +340,12 @@ const withdrawOrder = async (req, res) => {
     });
   }
 };
+
 const freelancerCompleteOrder = async (req, res) => {
   try {
     const { orderId } = req.params;
+    const { files } = req;
+
     const order = await Order.findById(orderId);
 
     if (!order) {
@@ -345,10 +354,10 @@ const freelancerCompleteOrder = async (req, res) => {
 
     if (
       order.freelancerId.toString() !== req.user._id.toString() ||
-      req.user.accountType !== 'FREELANCER' //  check user is freelancer or not
+      req.user.accountType !== 'FREELANCER'
     ) {
       return res.status(403).json({
-        message: 'Only the freelancer can mark the order as completed',
+        message: 'Only the assigned freelancer can mark the order as completed',
       });
     }
 
@@ -356,13 +365,48 @@ const freelancerCompleteOrder = async (req, res) => {
       return res.status(400).json({ message: 'Order already completed' });
     }
 
-    // Mark the order as completed
+    if (!files || files.length === 0) {
+      return res.status(400).json({
+        message: 'Please upload at least one file before completing the order',
+      });
+    }
+
+    const cloudinaryUrls = [];
+
+    for (const file of files) {
+      try {
+        // eslint-disable-next-line no-await-in-loop
+        const uploadedFile = await uploadOnCloudinary(file.path);
+        if (uploadedFile) {
+          cloudinaryUrls.push(uploadedFile.secure_url);
+        } else {
+          throw new Error(`Failed to upload file ${file.originalname}`);
+        }
+      } catch (error) {
+        console.error('Error creating task:', error);
+        // eslint-disable-next-line no-await-in-loop
+        await deleteImagesInUploadsFolder();
+        res.status(500).send({ status: false, msg: 'Server error' });
+      } finally {
+        // eslint-disable-next-line no-await-in-loop
+        // await deleteImagesInUploadsFolder();
+      }
+    }
+
+    // Update the order status and deliverables
     order.status = 'completed';
+    order.files = cloudinaryUrls;
     await order.save();
 
-    res.json({ message: 'Order marked as completed', order });
+    return res.status(200).json({
+      message: 'Order marked as completed',
+      files: cloudinaryUrls,
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to mark order as completed' });
+    console.error('Error completing order:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  } finally {
+    await deleteImagesInUploadsFolder(); // Ensure only specific files are deleted
   }
 };
 
@@ -395,7 +439,6 @@ const orderStatusDelivered = async (req, res) => {
     res.status(500).json({ status: false, msg: 'Server error', error });
   }
 };
-
 const orderStatusRevision = async (req, res) => {
   const { orderId } = req.params;
 
@@ -418,9 +461,10 @@ const orderStatusRevision = async (req, res) => {
       });
     }
 
+    // Check if revisions are available
     if (order.revision > 0) {
-      order.revision -= 1;
-      order.status = 'revision';
+      order.revision -= 1; // Decrease revision count
+      order.status = 'revision'; // Update order status to 'revision'
       await order.save();
 
       return res.status(200).json({
@@ -429,9 +473,10 @@ const orderStatusRevision = async (req, res) => {
       });
     }
 
+    // If revision count is 0, prevent further revisions
     return res.status(400).json({
       status: false,
-      msg: 'You cannot request more revisions',
+      msg: 'You cannot request more revisions, revision count is 0',
     });
   } catch (error) {
     return res.status(500).json({
@@ -441,6 +486,7 @@ const orderStatusRevision = async (req, res) => {
     });
   }
 };
+
 module.exports = {
   createOrder,
   getOrder,

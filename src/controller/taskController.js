@@ -201,8 +201,6 @@ const gettasksUserByuserId = async (req, res) => {
   }
 };
 
-//module.exports = gettasksUserByuserId;
-
 //========================update task byID===============================//
 
 const updateTask = async (req, res) => {
@@ -467,30 +465,33 @@ const deleteTaskImage = async (req, res) => {
 
 const searchTask = async (req, res) => {
   try {
-    const { taskSearch } = req.body;
+    const { title, category } = req.body;
 
-    if (!taskSearch) {
+    if (!title && !category) {
       return res
-
         .status(400)
-
-        .json({ status: false, msg: 'Please provide task title' });
+        .json({ status: false, msg: 'Please provide task title or category' });
     }
 
-    const tasks = await Task.find({ title: taskSearch });
+    const query = [];
+    if (title) {
+      query.push({ title: { $regex: title, $options: 'i' } }); // Case-insensitive title search
+    }
+    if (category) {
+      query.push({ category: { $regex: category, $options: 'i' } }); // Case-insensitive category search
+    }
+
+    const tasks = await Task.find({ $or: query });
 
     if (tasks.length === 0) {
-      return res.status(400).json({
+      return res.status(404).json({
         status: false,
-
-        msg: 'Task not found with this title',
+        msg: 'No tasks found matching the search criteria',
       });
     }
 
     return res
-
       .status(200)
-
       .json({ status: true, msg: 'Data fetched successfully', data: tasks });
   } catch (error) {
     return res.status(500).json({ status: false, msg: error.message });
