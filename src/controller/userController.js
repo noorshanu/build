@@ -897,6 +897,7 @@ const getProfileUsinId = async (req, res) => {
       country: user.country,
       education: user.education,
       experience: user.experience,
+      certificate: user.certificate,
       otherDetails: user.otherDetails,
       kind: user.kind,
       tasks: userData[0].tasksData,
