@@ -1643,14 +1643,22 @@ const addCertificate = async (req, res) => {
   try {
     const { user } = req;
 
-    const certificate = req.body;
+    // Extract the certificate array from req.body
+    const certificates = req.body.certificate;
 
-    if (!certificate) {
+    if (
+      !certificates ||
+      !Array.isArray(certificates) ||
+      certificates.length === 0
+    ) {
       return res.status(400).json({
         status: false,
         msg: 'Please provide certificate data',
       });
     }
+
+    // Use the first certificate in the array
+    const certificate = certificates[0];
 
     if (
       !certificate.certificateName ||
@@ -1663,12 +1671,14 @@ const addCertificate = async (req, res) => {
       });
     }
 
+    // Push the certificate to the user's certificate array
     user.certificate.push({
       certificateName: certificate.certificateName,
       issueBy: certificate.issueBy,
       yearIssued: certificate.yearIssued,
     });
 
+    // Save the user document
     await user.save();
 
     return res.status(201).json({
