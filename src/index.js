@@ -113,7 +113,6 @@
 // });
 
 //=========================To allow all origins for testing and development purposes===================//
-
 require('dotenv').config({ path: '.env' });
 const express = require('express');
 const mongoose = require('mongoose');
@@ -132,10 +131,10 @@ const server = http.createServer(app);
 app.use(cookieParser());
 app.use(express.json());
 
-// CORS setup for Express
+// CORS setup for Express to allow all origins and also explicitly allow http://localhost:3000
 app.use(
   cors({
-    origin: true, // Allow all origins
+    origin: ['http://localhost:3000', true], // Allow http://localhost:3000 and all origins
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -147,7 +146,7 @@ app.use(
     ],
   }),
 );
-//app.options('*', cors());
+
 // Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -158,7 +157,7 @@ app.get('/', (req, res) => {
 // Socket.io setup with CORS
 const io = new Server(server, {
   cors: {
-    origin: true, // Allow all origins
+    origin: ['http://localhost:3000', true], // Allow http://localhost:3000 and all origins
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
