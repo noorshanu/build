@@ -278,7 +278,7 @@ router.post(
   upload.array('images', 10),
   createtask,
 );
-router.get('/task/:taskId', authenticate, gettaskById);
+router.get('/task/:taskId', gettaskById);
 router.get('/tasks/user/:userId', authenticate, gettasksUserByuserId);
 router.get('/tasks', gettask);
 router.get('/searchTask', authenticate, searchTask);
