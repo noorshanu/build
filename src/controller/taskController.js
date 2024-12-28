@@ -191,12 +191,7 @@ const gettasksUserByuserId = async (req, res) => {
     const tasks = await Task.find({
       userId,
     }).populate('userId', ' UserName email avatar title');
-    if (tasks.length === 0) {
-      return res
-        .status(401)
-        .json({ status: false, msg: 'tasks not found with this taskId' });
-    }
-    console.log(tasks);
+
     res
       .status(200)
       .json({ status: true, msg: 'Data fetched successfully', data: tasks });
