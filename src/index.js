@@ -136,7 +136,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: true, // Allow all origins
-    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT', 'options'],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
     exposedHeaders: [
