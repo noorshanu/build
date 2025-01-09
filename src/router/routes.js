@@ -456,9 +456,5 @@ router.get('/proposals/:jobId', authenticate, getproposals);
 //=======================notification Controller=================//
 router.post('/sendNotfication', SendNotifications);
 router.get('/getNotfication/:userId', GetNotifications);
-router.patch(
-  '/updateNotification/:notificationId',
-
-  MarkNotificationAsRead,
-);
+router.patch('/updateNotification/:notificationId', MarkNotificationAsRead);
 module.exports = router;
