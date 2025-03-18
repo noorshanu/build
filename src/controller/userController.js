@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-
+const axios = require('axios');
 const crypto = require('crypto');
 
 const nodemailer = require('nodemailer');
@@ -1971,7 +1971,21 @@ const searchApi = async (req, res) => {
     return res.status(500).send({ status: false, msg: error.message });
   }
 };
+const getLocation = async (req, res) => {
+  try {
+    const response = await axios.get('https://ipapi.co/json/');
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching location data:', error.message);
+    if (error.response) {
+      console.error('Response status:', error.response.status);
+      console.error('Response data:', error.response.data);
+    }
+    res.status(500).json({ error: 'Error fetching location data' });
+  }
+};
 module.exports = {
+  getLocation,
   register,
   login,
   avatar,

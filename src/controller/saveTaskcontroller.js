@@ -50,15 +50,8 @@ const getSavedTasks = async (req, res) => {
       },
     });
 
-    if (!savedTasks || savedTasks.length === 0) {
-      return res
-        .status(404)
-        .json({ status: false, msg: 'No saved tasks found for this user' });
-    }
-
-    // Filter out tasks that are null
+    // Remove the 404 error case and just return an empty array
     const tasks = savedTasks.filter(savedTask => savedTask.taskId !== null);
-
     res.status(200).json({ status: true, data: tasks });
   } catch (error) {
     console.error(error);
