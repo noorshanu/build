@@ -43,6 +43,7 @@ const {
   changeMode,
   searchApi,
   checkUsernameAvailable,
+  getLocation,
 } = require('../controller/userController');
 const {
   createOrder,
@@ -457,4 +458,5 @@ router.get('/proposals/:jobId', authenticate, getproposals);
 router.post('/sendNotfication', SendNotifications);
 router.get('/getNotfication/:userId', GetNotifications);
 router.patch('/updateNotification/:notificationId', MarkNotificationAsRead);
+router.get('/api/location', getLocation);
 module.exports = router;
