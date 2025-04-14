@@ -361,7 +361,9 @@ const login = async (req, res) => {
     }
 
     // Return the user data and tokens
-    return res.status(200).json({ accessToken: accessToken });
+    return res.status(200).json({
+      accessToken: accessToken,
+    });
   } catch (error) {
     console.log('login error = ', error);
     return res.status(500).send({ status: false, msg: 'Failed to login' });
