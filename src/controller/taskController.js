@@ -520,6 +520,22 @@ const setTaskInitTxStatus = async (req, res) => {
     return res.status(500).json({ status: false, msg: error.message });
   }
 };
+const getRecentGigs = async (req, res) => {
+  try {
+    const { limit = 10 } = req.query;
+    const parsedLimit = parseInt(limit, 10); // parse first
+
+    const gigs = await Task.find({ isPublish: true })
+      .sort({ createdAt: -1 })
+      .limit(parsedLimit); // then use here
+
+    return res
+      .status(200)
+      .json({ status: true, msg: 'Recent gigs fetched', data: gigs });
+  } catch (error) {
+    return res.status(500).json({ status: false, msg: error.message });
+  }
+};
 
 module.exports = {
   createtask,
@@ -532,4 +548,5 @@ module.exports = {
   deleteTaskImage,
   searchTask,
   setTaskInitTxStatus,
+  getRecentGigs,
 };

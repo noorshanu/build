@@ -69,6 +69,7 @@ const {
   deleteTaskImage,
   searchTask,
   setTaskInitTxStatus,
+  getRecentGigs,
 } = require('../controller/taskController.js');
 
 const {
@@ -326,6 +327,7 @@ router.delete(
   authorization,
   deleteTaskImage,
 );
+router.get('/recent-gigs', authenticate, getRecentGigs);
 //= ====================Bonous router===============================//
 router.post('/bonus', authenticate, bonus);
 router.post(

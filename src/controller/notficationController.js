@@ -29,11 +29,59 @@ const SendNotifications = async (req, res) => {
   }
 };
 
+// const GetNotifications = async (req, res) => {
+//   try {
+//     const { userId, page = 1, limit = 10 } = req.params;
+
+//     // Validate userId
+//     if (!userId) {
+//       return res.status(400).json({
+//         status: false,
+//         msg: 'Please provide a valid userId.',
+//       });
+//     }
+
+//     // Build query to fetch all notifications for the given user
+//     const query = { userId };
+
+//     // Pagination logic
+//     const skip = (page - 1) * limit;
+
+//     // Fetch notifications
+//     const notifications = await NotificationModel.find(query)
+//       .sort({ createdAt: -1 })
+//       .skip(skip)
+//       .limit(parseInt(limit, 10));
+
+//     // Count total notifications for pagination metadata
+//     const totalNotifications = await NotificationModel.countDocuments(query);
+
+//     // Return success response
+//     return res.status(200).json({
+//       status: true,
+//       msg: 'Notifications fetched successfully.',
+//       data: notifications,
+//       meta: {
+//         currentPage: parseInt(page, 10),
+//         totalPages: Math.ceil(totalNotifications / limit),
+//         totalNotifications,
+//       },
+//     });
+//   } catch (error) {
+//     // Return error response
+//     console.error('Error fetching notifications:', error.message);
+//     return res.status(500).json({
+//       status: false,
+//       msg: 'Internal server error.',
+//     });
+//   }
+// };
+
 const GetNotifications = async (req, res) => {
   try {
-    const { userId, page = 1, limit = 10 } = req.params;
+    const { userId } = req.params; // Correct way to fetch userId from URL parameters
+    const { page = 1, limit = 10 } = req.query; // Fetch page and limit from query parameters
 
-    // Validate userId
     if (!userId) {
       return res.status(400).json({
         status: false,
@@ -41,10 +89,7 @@ const GetNotifications = async (req, res) => {
       });
     }
 
-    // Build query to fetch all notifications for the given user
     const query = { userId };
-
-    // Pagination logic
     const skip = (page - 1) * limit;
 
     // Fetch notifications
@@ -53,10 +98,21 @@ const GetNotifications = async (req, res) => {
       .skip(skip)
       .limit(parseInt(limit, 10));
 
-    // Count total notifications for pagination metadata
     const totalNotifications = await NotificationModel.countDocuments(query);
 
-    // Return success response
+    if (notifications.length === 0) {
+      return res.status(200).json({
+        status: true,
+        msg: 'No notifications found.',
+        data: [],
+        meta: {
+          currentPage: parseInt(page, 10),
+          totalPages: Math.ceil(totalNotifications / limit),
+          totalNotifications,
+        },
+      });
+    }
+
     return res.status(200).json({
       status: true,
       msg: 'Notifications fetched successfully.',
@@ -68,7 +124,6 @@ const GetNotifications = async (req, res) => {
       },
     });
   } catch (error) {
-    // Return error response
     console.error('Error fetching notifications:', error.message);
     return res.status(500).json({
       status: false,
