@@ -23,8 +23,8 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false,
   auth: {
-    user: 'noreply@deelance.com',
-    pass: 'exstgantrkhpvbmz',
+    user: 'noreplydeelance@gmail.com',
+    pass: 'lsfr eivt kriv lolu',
   },
 });
 
@@ -134,10 +134,142 @@ const RefreshToken = async (req, res) => {
 
 //= ==========================signup user====================================//
 
+// const register = async (req, res) => {
+//   try {
+//     const errors = validationResult(req);
+
+//     if (!errors.isEmpty()) {
+//       return res.status(400).json({ errors: errors.array() });
+//     }
+
+//     const { UserName, email, password, wallet, referrer, accountType } =
+//       req.body;
+
+//     // Check if the email exists in the verify collection
+//     const existingVerifyEmail = await verify.findOne({ email });
+//     if (existingVerifyEmail) {
+//       // Email exists in verifies collection, update the existing verification document
+
+//       // Update the existing verification document with new values
+//       existingVerifyEmail.UserName = UserName;
+//       existingVerifyEmail.wallet = wallet;
+//       existingVerifyEmail.referrer = referrer;
+//       existingVerifyEmail.accountType = accountType;
+
+//       // Save the updated verify document to the database
+//       await existingVerifyEmail.save();
+
+//       // Construct verification URL
+//       const verificationUrl = `${process.env.FRONTEND_URL}/email-verify?token=${existingVerifyEmail.verificationToken}&email=${existingVerifyEmail.email}`;
+
+//       // Send verification email
+//       const emailData = {
+//         from: 'noreply@deelance.com',
+//         to: email,
+//         subject: 'Verify your Email! - Deelance',
+//         html: `
+//           <!DOCTYPE html>
+//           <html lang="en">
+//           <head>
+//               <meta charset="UTF-8">
+//               <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//               <title>Email Verification</title>
+//           </head>
+//           <body>
+//               <p>Hello ${UserName},</p>
+//               <p>Thanks for signing up for Deelance.</p>
+//               <p>Please click the link below to verify your account:</p>
+//               <a href="${verificationUrl}">Verify your account</a>
+//               <p>Cheers,<br/>The Deelance Team</p>
+//           </body>
+//           </html>
+//         `,
+//       };
+
+//       transporter.sendMail(emailData, function (err, info) {
+//         if (err) {
+//           console.error('Error sending verification email:', err);
+//           return res
+//             .status(500)
+//             .json({ message: 'Failed to send verification email' });
+//         }
+//         console.log('Email sent:', info.response);
+//         res.status(201).json({
+//           message: 'Verification email sent successfully',
+//           data: verificationUrl,
+//         });
+//       });
+//     } else {
+//       // Email does not exist in verifies collection, proceed with creating a new verification document
+
+//       // Generate verification token
+//       const verificationToken = crypto.randomBytes(20).toString('hex');
+
+//       // Create new verify instance
+//       const newVerify = new verify({
+//         UserName,
+//         email,
+//         password, // No need to hash the password here
+//         wallet,
+//         verificationToken,
+//         referrer,
+//         accountType,
+//       });
+
+//       // Save the verify document to the database
+//       await newVerify.save();
+
+//       // Construct verification URL
+//       // const verificationUrl = `${process.env.FRONTEND_URL}/email-verify?token=${verificationToken}`;
+//       const verificationUrl = `${process.env.FRONTEND_URL}/email-verify?token=${verificationToken}&email=${newVerify.email}`;
+
+//       // Send verification email
+//       const emailData = {
+//         from: 'noreply@deelance.com',
+//         to: email,
+//         subject: 'Verify your Email! - Deelance',
+//         html: `
+//           <!DOCTYPE html>
+//           <html lang="en">
+//           <head>
+//               <meta charset="UTF-8">
+//               <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//               <title>Email Verification</title>
+//           </head>
+//           <body>
+//               <p>Hello ${UserName},</p>
+//               <p>Thanks for signing up for Deelance.</p>
+//               <p>Please click the link below to verify your account:</p>
+//               <a href="${verificationUrl}">Verify your account</a>
+//               <p>Cheers,<br/>The Deelance Team</p>
+//           </body>
+//           </html>
+//         `,
+//       };
+
+//       transporter.sendMail(emailData, function (err, info) {
+//         if (err) {
+//           console.error('Error sending verification email:', err);
+//           return res
+//             .status(500)
+//             .json({ message: 'Failed to send verification email' });
+//         }
+//         console.log('Email sent:', info.response);
+//         res.status(201).json({
+//           message: 'Verification email sent successfully',
+//           data: verificationUrl,
+//         });
+//       });
+//     }
+//   } catch (error) {
+//     console.error('Failed to register user:', error);
+//     res.status(500).json({ message: 'Failed to register user' });
+//   }
+// };
+
 const register = async (req, res) => {
   try {
     const errors = validationResult(req);
-
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
@@ -145,157 +277,175 @@ const register = async (req, res) => {
     const { UserName, email, password, wallet, referrer, accountType } =
       req.body;
 
-    // Check if the email exists in the verify collection
-    const existingVerifyEmail = await verify.findOne({ email });
-    if (existingVerifyEmail) {
-      // Email exists in verifies collection, update the existing verification document
+    // Step 1: Check if user is already registered and verified
+    const existingUser = await User.findOne({ email });
+    if (existingUser && existingUser.verified) {
+      return res.status(400).json({
+        message: 'Email is already registered and verified. Please login.',
+      });
+    }
 
+    // Step 2: Check if unverified record exists in `verify` collection
+    const existingVerifyEmail = await verify.findOne({ email });
+
+    // Construct verification token (reuse if exists)
+    const verificationToken =
+      existingVerifyEmail?.verificationToken ||
+      crypto.randomBytes(20).toString('hex');
+
+    if (existingVerifyEmail) {
       // Update the existing verification document with new values
       existingVerifyEmail.UserName = UserName;
+      existingVerifyEmail.password = password; // Not hashed — will be hashed on transfer to `User`
       existingVerifyEmail.wallet = wallet;
       existingVerifyEmail.referrer = referrer;
       existingVerifyEmail.accountType = accountType;
-
-      // Save the updated verify document to the database
+      existingVerifyEmail.verificationToken = verificationToken;
       await existingVerifyEmail.save();
-
-      // Construct verification URL
-      const verificationUrl = `${process.env.FRONTEND_URL}/email-verify?token=${existingVerifyEmail.verificationToken}&email=${existingVerifyEmail.email}`;
-
-      // Send verification email
-      const emailData = {
-        from: 'noreply@deelance.com',
-        to: email,
-        subject: 'Verify your Email! - Deelance',
-        html: `
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Email Verification</title>
-          </head>
-          <body>
-              <p>Hello ${UserName},</p>
-              <p>Thanks for signing up for Deelance.</p>
-              <p>Please click the link below to verify your account:</p>
-              <a href="${verificationUrl}">Verify your account</a>
-              <p>Cheers,<br/>The Deelance Team</p>
-          </body>
-          </html>
-        `,
-      };
-
-      transporter.sendMail(emailData, function (err, info) {
-        if (err) {
-          console.error('Error sending verification email:', err);
-          return res
-            .status(500)
-            .json({ message: 'Failed to send verification email' });
-        }
-        console.log('Email sent:', info.response);
-        res.status(201).json({
-          message: 'Verification email sent successfully',
-          data: verificationUrl,
-        });
-      });
     } else {
-      // Email does not exist in verifies collection, proceed with creating a new verification document
-
-      // Generate verification token
-      const verificationToken = crypto.randomBytes(20).toString('hex');
-
-      // Create new verify instance
+      // Create new verify document
       const newVerify = new verify({
         UserName,
         email,
-        password, // No need to hash the password here
+        password,
         wallet,
         verificationToken,
         referrer,
         accountType,
       });
-
-      // Save the verify document to the database
       await newVerify.save();
-
-      // Construct verification URL
-      // const verificationUrl = `${process.env.FRONTEND_URL}/email-verify?token=${verificationToken}`;
-      const verificationUrl = `${process.env.FRONTEND_URL}/email-verify?token=${verificationToken}&email=${newVerify.email}`;
-
-      // Send verification email
-      const emailData = {
-        from: 'noreply@deelance.com',
-        to: email,
-        subject: 'Verify your Email! - Deelance',
-        html: `
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Email Verification</title>
-          </head>
-          <body>
-              <p>Hello ${UserName},</p>
-              <p>Thanks for signing up for Deelance.</p>
-              <p>Please click the link below to verify your account:</p>
-              <a href="${verificationUrl}">Verify your account</a>
-              <p>Cheers,<br/>The Deelance Team</p>
-          </body>
-          </html>
-        `,
-      };
-
-      transporter.sendMail(emailData, function (err, info) {
-        if (err) {
-          console.error('Error sending verification email:', err);
-          return res
-            .status(500)
-            .json({ message: 'Failed to send verification email' });
-        }
-        console.log('Email sent:', info.response);
-        res.status(201).json({
-          message: 'Verification email sent successfully',
-          data: verificationUrl,
-        });
-      });
     }
+
+    // Build verification URL
+    const verificationUrl = `${process.env.FRONTEND_URL}/email-verify?token=${verificationToken}&email=${email}`;
+
+    // Send email
+    const emailData = {
+      from: 'noreply@deelance.com',
+      to: email,
+      subject: 'Verify your Email! - Deelance',
+      html: `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Email Verification</title>
+        </head>
+        <body>
+            <p>Hello ${UserName},</p>
+            <p>Thanks for signing up for Deelance.</p>
+            <p>Please click the link below to verify your account:</p>
+            <a href="${verificationUrl}">Verify your account</a>
+            <p>Cheers,<br/>The Deelance Team</p>
+        </body>
+        </html>
+      `,
+    };
+
+    transporter.sendMail(emailData, function (err, info) {
+      if (err) {
+        console.error('Error sending verification email:', err);
+        return res
+          .status(500)
+          .json({ message: 'Failed to send verification email' });
+      }
+      console.log('Verification email sent:', info.response);
+      return res.status(201).json({
+        message: 'Verification email sent successfully',
+        data: verificationUrl,
+      });
+    });
   } catch (error) {
     console.error('Failed to register user:', error);
     res.status(500).json({ message: 'Failed to register user' });
   }
 };
 
+// const emailverify = async (req, res) => {
+//   const { token } = req.body; // Adjust according to where the token is sent from
+
+//   try {
+//     const verifyDocument = await verify.findOne({
+//       verificationToken: token,
+//     });
+
+//     if (!verifyDocument) {
+//       return res.status(404).send({ msg: 'Invalid verification token' });
+//     }
+
+//     // Create a new user from the verify document
+//     const newUser = new User({
+//       ...verifyDocument.toObject(),
+//       verified: true,
+//       verificationToken: undefined,
+//     });
+
+//     await newUser.save();
+//     await verify.deleteOne({ _id: verifyDocument._id });
+
+//     res.status(200).json({ msg: 'Email verified successfully' });
+//   } catch (error) {
+//     res.status(500).json({ msg: 'Error verifying email', error });
+//   }
+// };
+
+// =========================login User ==============================//
 const emailverify = async (req, res) => {
-  const { token } = req.body; // Adjust according to where the token is sent from
+  const { token } = req.body;
 
   try {
-    const verifyDocument = await verify.findOne({
-      verificationToken: token,
-    });
+    const verifyDocument = await verify.findOne({ verificationToken: token });
 
     if (!verifyDocument) {
-      return res.status(404).send({ msg: 'Invalid verification token' });
+      return res
+        .status(404)
+        .send({ msg: 'Invalid or expired verification token' });
     }
 
-    // Create a new user from the verify document
+    const existingUser = await User.findOne({ email: verifyDocument.email });
+    if (existingUser) {
+      await verify.deleteOne({ _id: verifyDocument._id });
+      return res.status(400).json({ msg: 'User already verified and exists' });
+    }
+
+    let currentMode = 'CLIENT';
+    let isClientEnabled = true;
+    let isFreelancerEnabled = false;
+
+    if (verifyDocument.accountType === 'FREELANCER') {
+      currentMode = 'FREELANCER';
+      isClientEnabled = false;
+      isFreelancerEnabled = true;
+    }
+
+    // Instead of destructuring unused variables, just delete them after copying
+    const userData = verifyDocument.toObject();
+    delete userData.verificationToken;
+    delete userData.__v;
+    delete userData._id;
+
     const newUser = new User({
-      ...verifyDocument.toObject(),
+      ...userData,
       verified: true,
-      verificationToken: undefined,
+      currentMode,
+      isClientEnabled,
+      isFreelancerEnabled,
     });
 
     await newUser.save();
     await verify.deleteOne({ _id: verifyDocument._id });
 
-    res.status(200).json({ msg: 'Email verified successfully' });
+    res
+      .status(200)
+      .json({ msg: 'Email verified and account created successfully' });
   } catch (error) {
-    res.status(500).json({ msg: 'Error verifying email', error });
+    console.error('Email verification error:', error);
+    res
+      .status(500)
+      .json({ msg: 'Server error during email verification', error });
   }
 };
-
-// =========================login User ==============================//
 
 const login = async (req, res) => {
   // memoryCheck.js

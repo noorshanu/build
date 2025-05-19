@@ -45,10 +45,29 @@ const verifySchema = new mongoose.Schema({
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   skills: [{ code: String, label: String }],
+  is_profileCompleted: { type: Boolean, default: false },
+
+  // Account Mode Switching
+
+  currentMode: {
+    type: String,
+
+    enum: ['FREELANCER', 'CLIENT'],
+
+    default: 'CLIENT',
+  },
+
+  isFreelancerEnabled: { type: Boolean, default: false },
+
+  isClientEnabled: { type: Boolean, default: true },
+
   accountType: {
     type: String,
+
     enum: ['FREELANCER', 'CLIENT'],
+
     default: 'FREELANCER',
+
     required: true,
   },
   education: [

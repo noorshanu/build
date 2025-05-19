@@ -89,7 +89,7 @@ io.on('connection', socket => {
 
 //==================production url======================//
 mongoose
-  .connect(process.env.MONGODB_URI_second, {
+  .connect(process.env.MONGODB_URI_PRIMARY, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 30000,
@@ -97,7 +97,7 @@ mongoose
   .then(() => {
     console.log(
       'MongoDB connected successfully',
-      process.env.MONGODB_URI_second,
+      process.env.MONGODB_URI_PRIMARY,
     );
   })
   .catch(err => {

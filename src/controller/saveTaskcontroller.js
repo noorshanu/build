@@ -52,6 +52,12 @@ const getSavedTasks = async (req, res) => {
 
     // Remove the 404 error case and just return an empty array
     const tasks = savedTasks.filter(savedTask => savedTask.taskId !== null);
+    if (tasks.length === 0) {
+      return res
+        .status(200)
+        .json({ status: true, data: [], msg: 'No saved tasks found' });
+    }
+
     res.status(200).json({ status: true, data: tasks });
   } catch (error) {
     console.error(error);
