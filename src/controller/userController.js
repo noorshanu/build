@@ -555,29 +555,66 @@ const checkUsernameAvailable = async (req, res) => {
 
 //= ====================log out ==================================//
 
+// const changeMode = async (req, res) => {
+//   try {
+//     const user = await User.findById(req.user._id);
+//     const userMode = user.Mode;
+
+//     if (userMode === 'FREELANCER') {
+//       user.Mode = 'CLIENT';
+//     } else {
+//       user.Mode = 'FREELANCER';
+//     }
+
+//     const updatedUser = await user.save();
+
+//     res.send({
+//       status: true,
+//       msg: 'user mode updated successfully',
+//       currentMode: updatedUser.Mode,
+//       data: user,
+//     });
+//   } catch (error) {
+//     return res
+//       .status(500)
+//       .send({ status: false, msg: 'Failed to update user Mode' });
+//   }
+// };
 const changeMode = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
-    const userMode = user.Mode;
 
-    if (userMode === 'FREELANCER') {
-      user.Mode = 'CLIENT';
-    } else {
-      user.Mode = 'FREELANCER';
+    if (!user) {
+      return res.status(404).send({
+        status: false,
+        msg: 'User not found',
+      });
     }
+
+    // Toggle mode and associated flags
+    const isCurrentlyFreelancer = user.currentMode === 'FREELANCER';
+
+    user.currentMode = isCurrentlyFreelancer ? 'CLIENT' : 'FREELANCER';
+    user.isClientEnabled = !isCurrentlyFreelancer;
+    user.isFreelancerEnabled = isCurrentlyFreelancer;
 
     const updatedUser = await user.save();
 
-    res.send({
+    res.status(200).send({
       status: true,
-      msg: 'user mode updated successfully',
-      currentMode: updatedUser.Mode,
-      data: user,
+      msg: 'User mode updated successfully',
+      currentMode: updatedUser.currentMode,
+      isClientEnabled: updatedUser.isClientEnabled,
+      isFreelancerEnabled: updatedUser.isFreelancerEnabled,
+      data: updatedUser,
     });
   } catch (error) {
-    return res
-      .status(500)
-      .send({ status: false, msg: 'Failed to update user Mode' });
+    console.error('Error updating user mode:', error);
+    res.status(500).send({
+      status: false,
+      msg: 'Failed to update user mode',
+      error,
+    });
   }
 };
 

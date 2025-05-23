@@ -28,39 +28,26 @@ const createtask = async (req, res) => {
       revision,
     } = req.body;
 
-    // Validate required fields
     if (!price || !title || !description) {
-      // await delay(5000);
       await deleteImagesInUploadsFolder();
       return res.status(400).send({
         status: false,
-        msg: 'price, title, and description are all required',
+        msg: 'Price, title, and description are required.',
       });
     }
 
-    // Parse keywords string into an array
-    const parsedKeywords = keywords.split(',');
+    const parsedKeywords = keywords?.split(',') || [];
 
-    // Convert the faqs string into a JavaScript object
-    let parsedFaqs;
-    if (typeof faqs === 'string') {
-      parsedFaqs = JSON.parse(faqs);
-    } else {
-      parsedFaqs = faqs;
-    }
+    const parsedFaqs = typeof faqs === 'string' ? JSON.parse(faqs) : faqs;
 
-    // Check if files are uploaded
     if (!req.files || req.files.length === 0) {
       await deleteImagesInUploadsFolder();
       return res.status(400).send({ status: false, msg: 'No file uploaded' });
     }
 
-    // Validate userId
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       await deleteImagesInUploadsFolder();
-      return res
-        .status(400)
-        .json({ status: false, msg: 'Please provide a correct UserId' });
+      return res.status(400).json({ status: false, msg: 'Invalid UserId' });
     }
 
     const user = await User.findById(userId);
@@ -69,31 +56,33 @@ const createtask = async (req, res) => {
       return res.status(404).send('User not found');
     }
 
-    // if (!user.is_profileCompleted) {
-    //   return res.status(400).json({
-    //     status: false,
-    //     msg: 'Please complete your profile first.',
-    //   });
-    // }
+    // ✅ Freelancer-only check
+    if (user.currentMode !== 'FREELANCER' || !user.isFreelancerEnabled) {
+      await deleteImagesInUploadsFolder();
+      return res.status(403).json({
+        status: false,
+        msg: 'Only freelancers can create tasks',
+      });
+    }
 
     const userTaskCount = await Task.countDocuments({ userId });
     if (userTaskCount >= 4) {
       await deleteImagesInUploadsFolder();
-      return res
-        .status(400)
-        .json({ status: false, msg: 'You can create only 4 tasks' });
+      return res.status(400).json({
+        status: false,
+        msg: 'You can create only 4 tasks',
+      });
     }
 
-    // Upload images and store their URLs
-    const uploadPromises = req.files.map(async file => {
-      const uploadResult = await uploadOnCloudinary(file.path);
-      if (!uploadResult || !uploadResult.url) {
-        throw new Error('Image not uploaded to Cloudinary');
-      }
-      return { url: uploadResult.url };
-    });
-
-    const uploadedImages = await Promise.all(uploadPromises);
+    const uploadedImages = await Promise.all(
+      req.files.map(async file => {
+        const uploadResult = await uploadOnCloudinary(file.path);
+        if (!uploadResult?.url) {
+          throw new Error('Image not uploaded to Cloudinary');
+        }
+        return { url: uploadResult.url };
+      }),
+    );
 
     const task = await Task.create({
       userId,
@@ -104,7 +93,7 @@ const createtask = async (req, res) => {
       deliveryDays,
       price,
       packageDescription,
-      images: uploadedImages, // Store image details
+      images: uploadedImages,
       isPublish,
       faqs: parsedFaqs,
       category,
@@ -112,12 +101,13 @@ const createtask = async (req, res) => {
       revision,
     });
 
-    res
-      .status(201)
-      .json({ status: true, msg: 'Task created successfully!', data: task });
+    res.status(201).json({
+      status: true,
+      msg: 'Task created successfully!',
+      data: task,
+    });
   } catch (error) {
     console.error('Error creating task:', error);
-    await deleteImagesInUploadsFolder();
     res.status(500).send({ status: false, msg: 'Server error' });
   } finally {
     await deleteImagesInUploadsFolder();
@@ -303,10 +293,11 @@ const updateTaskImages = async (req, res) => {
         .status(400)
         .json({ status: false, msg: 'Please provide a correct TaskId' });
     }
-    if (!newImages) {
+
+    if (!newImages || newImages.length === 0) {
       return res
         .status(400)
-        .json({ status: false, msg: 'give images for upload , ,' });
+        .json({ status: false, msg: 'Please provide images for upload' });
     }
 
     const task = await Task.findById(taskId);
@@ -314,7 +305,14 @@ const updateTaskImages = async (req, res) => {
       return res.status(404).json({ status: false, msg: 'Task not found' });
     }
 
-    //=============Upload new images to Cloudinary======================//
+    // Authorization: only owner or admin can update images
+    if (req.user.id !== task.userId.toString() && req.user.role !== 'admin') {
+      return res
+        .status(403)
+        .json({ status: false, msg: 'Not authorized to update this task' });
+    }
+
+    // Upload new images to Cloudinary
     const uploadPromises = newImages.map(async image => {
       const uploadResult = await uploadOnCloudinary(image.path);
       if (!uploadResult || !uploadResult.url) {
@@ -325,7 +323,6 @@ const updateTaskImages = async (req, res) => {
 
     const uploadedImages = await Promise.all(uploadPromises);
 
-    // Update task with new images
     task.images.push(...uploadedImages);
     await task.save();
 
@@ -341,9 +338,9 @@ const updateTaskImages = async (req, res) => {
 };
 
 const deleteTask = async (req, res) => {
-  const deleteid = req.params.taskId;
-
   try {
+    const deleteid = req.params.taskId;
+
     if (!mongoose.Types.ObjectId.isValid(deleteid)) {
       return res.status(400).send({
         status: false,
@@ -352,32 +349,34 @@ const deleteTask = async (req, res) => {
     }
 
     const task = await Task.findById(deleteid);
-
     if (!task) {
       return res
         .status(404)
         .send({ status: false, msg: 'Task not found with this taskId' });
     }
 
-    // eslint-disable-next-line prefer-destructuring
+    // Authorization: only owner or admin can delete
+    if (req.user.id !== task.userId.toString() && req.user.role !== 'admin') {
+      return res
+        .status(403)
+        .json({ status: false, msg: 'Not authorized to delete this task' });
+    }
+
     const images = task.images.map(image => image.url);
 
     if (images && images.length > 0) {
-      // Check if any image does not exist in Cloudinary
       const imageChecks = images.map(imageUrl =>
         checkImageExistsInCloudinary(imageUrl),
       );
       const imageCheckResults = await Promise.all(imageChecks);
 
       if (imageCheckResults.some(result => !result)) {
-        // If any image doesn't exist in Cloudinary, delete the task
         await Task.deleteOne({ _id: deleteid });
         return res
           .status(200)
           .send({ status: true, msg: 'Task deleted successfully' });
       }
 
-      // Delete all images from Cloudinary
       const deleteImagePromises = images.map(imageUrl =>
         deleteTaskFromCloudinary(imageUrl),
       );
@@ -391,7 +390,6 @@ const deleteTask = async (req, res) => {
       }
     }
 
-    // Delete the task after deleting images or if there are no images
     await Task.deleteOne({ _id: deleteid });
 
     return res
@@ -404,63 +402,67 @@ const deleteTask = async (req, res) => {
       .send({ status: false, msg: 'Internal Server Error' });
   }
 };
-
 //======================Delete a specific image associated with a task============================//
 const deleteTaskImage = async (req, res) => {
   try {
-    const taskid = req.params.taskId;
-    const imageid = req.params.imageId;
+    const { taskId, imageId } = req.params;
 
-    // Validate taskId and imageId
+    // Validate IDs
     if (
-      !mongoose.Types.ObjectId.isValid(taskid) ||
-      !mongoose.Types.ObjectId.isValid(imageid)
+      !mongoose.Types.ObjectId.isValid(taskId) ||
+      !mongoose.Types.ObjectId.isValid(imageId)
     ) {
       return res.status(400).json({
         status: false,
-        msg: 'Please provide correct TaskId and ImageId',
+        msg: 'Please provide valid taskId and imageId',
       });
     }
 
-    // Find task and remove the specific image
-    const task = await Task.findById(taskid);
+    // Find task
+    const task = await Task.findById(taskId);
     if (!task) {
       return res.status(404).json({ status: false, msg: 'Task not found' });
     }
 
-    // Find the image to be deleted
-    // eslint-disable-next-line eqeqeq
-    const imageToDelete = task.images.find(image => image._id == imageid);
+    // ✅ Authorization check (creator can delete only their image)
+    if (task.userId.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ status: false, msg: 'Not authorized to delete this image' });
+    }
+
+    // Find the image to delete
+    const imageToDelete = task.images.find(
+      image => image._id.toString() === imageId,
+    );
     if (!imageToDelete) {
       return res
         .status(404)
         .json({ status: false, msg: 'Image not found in task' });
     }
 
-    // Delete the image from Cloudinary
+    // Delete from Cloudinary
     const cloudinaryDeleted = await deleteTaskFromCloudinary(imageToDelete.url);
-
     if (!cloudinaryDeleted) {
       return res
         .status(500)
         .json({ status: false, msg: 'Failed to delete image from Cloudinary' });
     }
 
-    // Remove the image from the task's images array
-    task.images.pull(imageid);
+    // Remove image from task and save
+    task.images.pull(imageId);
     await task.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       status: true,
       msg: 'Task image deleted successfully!',
       data: task,
     });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ status: false, msg: 'Server error' });
+    return res.status(500).json({ status: false, msg: 'Server error' });
   }
 };
-
 //=====================search taSK aPi=============================//
 
 const searchTask = async (req, res) => {

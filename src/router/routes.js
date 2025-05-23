@@ -322,11 +322,11 @@ router.delete(
 );
 
 router.delete(
-  '/deleteImagetasks/:userId/:taskId/images/:imageId',
+  '/tasks/:taskId/images/:imageId',
   authenticate,
-  authorization,
-  deleteTaskImage,
+  deleteTaskImage, // add user check inside here
 );
+
 router.get('/recent-gigs', authenticate, getRecentGigs);
 //= ====================Bonous router===============================//
 router.post('/bonus', authenticate, bonus);

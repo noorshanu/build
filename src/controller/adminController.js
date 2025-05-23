@@ -3,10 +3,26 @@ const User = require('../model/userModel');
 
 const getAllUsers = async (req, res) => {
   try {
-    const allUsers = await User.find();
-    res.status(200).json({ status: false, data: allUsers });
+    // Admin access check
+    if (req.user.role !== 'ADMIN') {
+      return res.status(403).json({ status: false, msg: 'Access denied' });
+    }
+
+    // Fetch all users excluding sensitive fields
+    const allUsers = await User.find().select('-password -refreshToken');
+
+    res.status(200).json({
+      status: true,
+      msg: 'All users fetched successfully',
+      data: allUsers,
+    });
   } catch (error) {
-    res.status(500).send({ status: false, msg: 'Server error' });
+    console.error('Error fetching users:', error);
+    res.status(500).json({
+      status: false,
+      msg: 'Server error while fetching users',
+      error,
+    });
   }
 };
 
