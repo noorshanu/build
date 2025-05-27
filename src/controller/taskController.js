@@ -118,30 +118,40 @@ const gettaskById = async (req, res) => {
   const { taskId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(taskId)) {
-    return res
-      .status(400)
-      .send({ status: false, msg: 'invalid taskId in params ..' });
+    return res.status(400).json({ status: false, msg: 'Invalid taskId' });
   }
 
   try {
     const task = await Task.findById(taskId).populate(
       'userId',
-      ' email  UserName avatar title revision wallet',
+      'UserName avatar title email revision wallet',
     );
+
     if (!task) {
-      return res
-        .status(404)
-        .send({ status: false, msg: 'Task not found with this taskId' });
+      return res.status(404).json({ status: false, msg: 'Task not found' });
     }
 
-    res.json({
+    // Only allow:
+    // - Task owner
+    // - Client if the task is published
+    if (
+      task.userId._id.toString() !== req.user._id.toString() &&
+      (req.user.role !== 'client' || !task.isPublish)
+    ) {
+      return res.status(403).json({
+        status: false,
+        msg: 'You are not authorized to view this task',
+      });
+    }
+
+    res.status(200).json({
       status: true,
-      message: 'task fetched successfully',
+      message: 'Task fetched successfully',
       data: task,
     });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ status: false, msg: 'Server error' });
+    res.status(500).json({ status: false, msg: 'Server error' });
   }
 };
 
@@ -164,30 +174,33 @@ const gettask = async (req, res) => {
 };
 
 const gettasksUserByuserId = async (req, res) => {
-  const { userId } = req.params; // Destructure userId from req.params
+  const { userId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ status: false, msg: 'Invalid userId' });
+  }
+
+  if (userId !== req.user._id.toString()) {
+    return res.status(403).json({
+      status: false,
+      msg: 'You are not authorized to view these tasks',
+    });
+  }
 
   try {
-    if (!userId || userId.trim() === '') {
-      console.log('Invalid userId'); // Log if userId is invalid
-      return res
-        .status(400)
-        .send({ status: false, msg: 'Please provide a valid userId' });
-    }
+    const tasks = await Task.find({ userId }).populate(
+      'userId',
+      'UserName email avatar title',
+    );
 
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).send({ status: false, msg: 'Invalid user ID' });
-    }
-
-    const tasks = await Task.find({
-      userId,
-    }).populate('userId', ' UserName email avatar title');
-
-    res
-      .status(200)
-      .json({ status: true, msg: 'Data fetched successfully', data: tasks });
+    res.status(200).json({
+      status: true,
+      msg: 'Tasks fetched successfully',
+      data: tasks,
+    });
   } catch (error) {
     console.error('Error fetching tasks:', error);
-    res.status(500).send({ status: false, msg: 'Server error' });
+    res.status(500).json({ status: false, msg: 'Server error' });
   }
 };
 
@@ -306,7 +319,7 @@ const updateTaskImages = async (req, res) => {
     }
 
     // Authorization: only owner or admin can update images
-    if (req.user.id !== task.userId.toString() && req.user.role !== 'admin') {
+    if (req.user._id !== task.userId.toString() && req.user.role !== 'admin') {
       return res
         .status(403)
         .json({ status: false, msg: 'Not authorized to update this task' });

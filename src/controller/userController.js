@@ -2163,6 +2163,16 @@ const searchApi = async (req, res) => {
 const getLocation = async (req, res) => {
   try {
     const response = await axios.get('https://ipapi.co/json/');
+    const { country_name } = response.data;
+
+    // Update country in user document if user is logged in
+    if (req.user && mongoose.Types.ObjectId.isValid(req.user._id)) {
+      const user = await User.findById(req.user._id);
+      if (user) {
+        user.country = country_name;
+        await user.save();
+      }
+    }
     res.json(response.data);
   } catch (error) {
     console.error('Error fetching location data:', error.message);
